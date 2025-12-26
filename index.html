@@ -1,0 +1,1346 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BoWi Lernraum – Die Revolution frisst ihre Kinder</title>
+  <style>
+    :root{
+      --bg:#0b0d10;
+      --card:#12161c;
+      --text:#e9eef6;
+      --muted:#a6b0c0;
+      --line:#1e2530;
+      --accent:#7c5cff;
+      --good:#3bd08f;
+      --warn:#ffcc66;
+      --bad:#ff5c7a;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius: 18px;
+      --radius2: 12px;
+      --max: 980px;
+      --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:var(--font);
+      color:var(--text);
+      background:
+        radial-gradient(1200px 600px at 20% -10%, rgba(124,92,255,.22), transparent 60%),
+        radial-gradient(900px 500px at 90% 20%, rgba(59,208,143,.12), transparent 55%),
+        var(--bg);
+    }
+    a{color:inherit}
+    .wrap{max-width:var(--max); margin:0 auto; padding:22px 16px 44px;}
+
+    header{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:12px; margin-bottom:18px;
+    }
+    .brand{
+      display:flex; align-items:center; gap:12px;
+      padding:10px 12px; border:1px solid var(--line);
+      border-radius:999px; background:rgba(255,255,255,.02);
+      min-width: 240px;
+    }
+    .logo{
+      width:34px; height:34px; border-radius:10px;
+      background:linear-gradient(135deg, rgba(124,92,255,.9), rgba(59,208,143,.65));
+      display:grid; place-items:center;
+      box-shadow:0 10px 24px rgba(124,92,255,.18);
+      flex:0 0 auto;
+    }
+    .logo svg{opacity:.95}
+    .brand-title{line-height:1.1}
+    .brand-title b{display:block; font-size:14px; letter-spacing:.2px}
+    .brand-title span{display:block; font-size:12px; color:var(--muted)}
+
+    .header-center{
+      display:flex; align-items:center; justify-content:center;
+      flex:1;
+      color: rgba(233,238,246,.92);
+      font-weight: 700;
+      letter-spacing: .25px;
+      font-size: 14px;
+      opacity: .95;
+    }
+
+    .right{display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:flex-end}
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:9px 12px; border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.02);
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .stage{
+      margin-top:14px;
+      background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .stage-top{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:16px 16px;
+      border-bottom:1px solid var(--line);
+      background:rgba(0,0,0,.18);
+      gap:10px;
+    }
+    .stage-top h1{
+      margin:0;
+      font-size:18px;
+      letter-spacing:.2px;
+    }
+    .stage-top .meta{
+      color:var(--muted);
+      font-size:12px;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+    .badge{
+      display:inline-flex; align-items:center; gap:8px;
+      background:rgba(124,92,255,.10);
+      border:1px solid rgba(124,92,255,.25);
+      color:var(--text);
+      padding:6px 10px;
+      border-radius:999px;
+      font-size:12px;
+    }
+    .progress{
+      width:170px; height:8px; border-radius:999px;
+      background:rgba(255,255,255,.08);
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.06);
+    }
+    .bar{height:100%; width:0%; background:linear-gradient(90deg, var(--accent), rgba(59,208,143,.9));}
+
+    .slide{display:none; padding:18px 16px 18px;}
+    .slide.active{display:block;}
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap:16px;
+      align-items:start;
+    }
+    @media (max-width: 860px){
+      .grid{grid-template-columns: 1fr;}
+      .progress{width:140px;}
+      .header-center{display:none;}
+    }
+
+    .card{
+      background:rgba(255,255,255,.02);
+      border:1px solid var(--line);
+      border-radius:var(--radius2);
+      padding:14px;
+    }
+    .card h2{margin:0 0 8px; font-size:16px; letter-spacing:.2px;}
+    .muted{color:var(--muted)}
+
+    .kicker{display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom:10px;}
+    .kdot{width:10px; height:10px; border-radius:50%; background:var(--accent); box-shadow:0 0 0 4px rgba(124,92,255,.12);}
+    .lead{margin:8px 0 0; color:var(--muted); line-height:1.45; font-size:14px;}
+
+    .callout{
+      margin-top:10px;
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.02);
+      color:var(--text);
+      font-size:13px;
+    }
+
+    .imgbox{display:grid; place-items:center; min-height:220px; border-radius:12px; border:1px dashed rgba(255,255,255,.12); background:rgba(0,0,0,.18); padding:10px;}
+    .imgbox img{width:100%; height:auto; display:block; border-radius:12px; object-fit:contain;}
+
+    .imgbox .ph{text-align:center; color:var(--muted); font-size:13px; line-height:1.4; max-width:26ch;}
+    .imgnote{margin-top:8px; color:rgba(166,176,192,.78); font-size:12px; text-align:center;}
+
+    .btnrow{
+      display:flex; justify-content:space-between; align-items:center;
+      gap:10px;
+      padding:14px 16px;
+      border-top:1px solid var(--line);
+      background:rgba(0,0,0,.16);
+    }
+    .btn{
+      cursor:pointer;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.03);
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:12px;
+      font-size:14px;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      transition:transform .05s ease, background .15s ease;
+      user-select:none;
+    }
+    .btn:active{transform:translateY(1px)}
+    .btn.primary{background:rgba(124,92,255,.16); border-color:rgba(124,92,255,.30);}
+    .btn[disabled]{opacity:.45; cursor:not-allowed}
+
+    .tag{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:6px 10px; border-radius:999px;
+      font-size:12px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.02);
+      color:var(--muted);
+    }
+
+    /* Level Gate */
+    .gate{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:16px;
+      align-items:stretch;
+    }
+    @media(max-width:860px){.gate{grid-template-columns:1fr;}}
+
+    .levelgrid{display:grid; gap:10px; margin-top:10px;}
+    .levelbtn{
+      color:var(--text);
+      text-align:left;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.02);
+      border-radius:16px;
+      padding:12px;
+      cursor:pointer;
+    }
+    .levelbtn:hover{border-color:rgba(124,92,255,.45)}
+    .levelbtn b{display:block; margin-bottom:4px;}
+    .levelbtn small{color:var(--muted); line-height:1.35; display:block;}
+
+    .noteBox{
+      border:1px solid rgba(255,204,102,.35);
+      background:rgba(255,204,102,.10);
+      border-radius:16px;
+      padding:12px;
+      margin-top:10px;
+      color:var(--text);
+      font-size:13px;
+    }
+
+    .qa{display:grid; gap:10px; margin-top:10px;}
+    .q{border:1px solid var(--line); background:rgba(255,255,255,.02); border-radius:14px; padding:12px;}
+    .q b{display:block; margin-bottom:8px}
+    .optrow{display:flex; gap:8px; flex-wrap:wrap}
+    .opt{
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.02);
+      border-radius:12px;
+      padding:8px 10px;
+      cursor:pointer;
+      font-size:13px;
+      color:var(--text);
+      user-select:none;
+    }
+    .opt:hover{border-color:rgba(124,92,255,.40)}
+    .opt.good{border-color:rgba(59,208,143,.6); background:rgba(59,208,143,.10)}
+    .opt.bad{border-color:rgba(255,92,122,.55); background:rgba(255,92,122,.10)}
+    .feedback{margin-top:8px; font-size:13px; color:var(--muted);}
+
+    .chips{display:flex; gap:8px; flex-wrap:wrap; margin-top:10px}
+    .chip{padding:7px 10px; border-radius:999px; border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.02); color:var(--muted); font-size:12px; cursor:pointer;}
+    .chip:hover{border-color:rgba(124,92,255,.40); color:var(--text)}
+
+    dialog{
+      border:none; border-radius:18px; width:min(720px, 92vw);
+      background:linear-gradient(180deg, rgba(18,22,28,.98), rgba(12,14,18,.98));
+      color:var(--text); box-shadow:0 40px 120px rgba(0,0,0,.6); padding:0;
+    }
+    dialog::backdrop{background:rgba(0,0,0,.55); backdrop-filter: blur(6px);}
+    .modal{padding:16px 16px 14px; border-bottom:1px solid var(--line);
+      display:flex; justify-content:space-between; align-items:center; gap:10px;}
+    .modal h3{margin:0; font-size:16px}
+    .modal .close{cursor:pointer; border:1px solid var(--line); background:rgba(255,255,255,.03);
+      color:var(--text); padding:8px 10px; border-radius:12px; font-size:13px;}
+    .modal-body{padding:14px 16px 18px; color:var(--muted); line-height:1.55; font-size:14px}
+
+    .chain{display:grid; gap:10px; margin-top:10px;}
+    .node{border:1px solid var(--line); background:rgba(255,255,255,.02); border-radius:14px;
+      padding:12px; cursor:pointer; display:flex; align-items:center; justify-content:space-between; gap:10px;}
+    .node:hover{border-color:rgba(124,92,255,.38)}
+    .node .left{display:flex; gap:10px; align-items:center}
+    .dot{width:10px; height:10px; border-radius:50%; background:var(--accent); box-shadow:0 0 0 4px rgba(124,92,255,.12);}
+    .dot.good{background:var(--good); box-shadow:0 0 0 4px rgba(59,208,143,.12)}
+    .dot.warn{background:var(--warn); box-shadow:0 0 0 4px rgba(255,204,102,.12)}
+    .dot.bad{background:var(--bad); box-shadow:0 0 0 4px rgba(255,92,122,.12)}
+    .node small{color:var(--muted)}
+
+    .mini{margin-top:10px; padding:10px 12px; border-radius:14px; border:1px solid rgba(255,255,255,.08);
+      background:rgba(0,0,0,.22); color:var(--muted); font-size:13px; line-height:1.5;}
+    .mini b{color:var(--text)}
+
+    .two{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+    @media(max-width:860px){.two{grid-template-columns:1fr}}
+
+    .match{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px;}
+    @media (max-width: 720px){.match{grid-template-columns:1fr}}
+    .pick{border:1px solid var(--line); background:rgba(255,255,255,.02); border-radius:14px; padding:12px;}
+    .pick h4{margin:0 0 10px; font-size:14px; color:var(--text)}
+    .item{padding:10px 10px; border:1px solid rgba(255,255,255,.10); background:rgba(255,255,255,.02);
+      border-radius:12px; margin-bottom:8px; cursor:pointer; color:var(--text); font-size:13px; user-select:none;}
+    .item:last-child{margin-bottom:0}
+    .item.selected{border-color:rgba(124,92,255,.55); background:rgba(124,92,255,.12)}
+    .item.locked{opacity:.65; cursor:default}
+
+    .helpbox{border:1px solid rgba(124,92,255,.28); background:rgba(124,92,255,.08);
+      border-radius:16px; padding:12px; color:var(--text); margin-bottom:12px;}
+    .helpbox h3{margin:0 0 8px; font-size:15px}
+    .helpbox .cols{display:grid; grid-template-columns: 1.2fr .8fr; gap:10px;}
+    @media(max-width:860px){.helpbox .cols{grid-template-columns:1fr}}
+    .helpbox ul{margin:0; padding-left:18px; color:var(--muted)}
+    .helpbox .starter{border:1px solid rgba(255,255,255,.10); border-radius:14px;
+      background:rgba(0,0,0,.18); padding:10px; color:var(--muted); font-size:13px; line-height:1.45;}
+
+    .tasks .t{border:1px solid var(--line); background:rgba(255,255,255,.02); border-radius:14px; padding:12px; margin-top:10px;}
+    .tasks .t b{display:block; margin-bottom:6px}
+    .tasks .op{display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border-radius:999px;
+      font-size:12px; border:1px solid rgba(255,255,255,.10); background:rgba(0,0,0,.18); color:var(--text); margin-right:8px;}
+
+    footer{margin-top:16px; color:rgba(166,176,192,.7); font-size:12px; text-align:center;}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand" aria-label="BoWi Lernraum">
+        <div class="logo" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <path d="M4 19V9l8-5 8 5v10" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M9 19v-6h6v6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="brand-title">
+          <b>BoWi Lernraum</b>
+          <span>Bodenstedt-Wilhelmsschule</span>
+        </div>
+      </div>
+
+      <!-- Added center title to ensure header shows "BoWi Lernraum" visibly even if logo/title area changes later -->
+      <div class="header-center" aria-hidden="true">BoWi Lernraum</div>
+
+      <div class="right">
+        <span class="pill" id="topicPill">Geschichte · Kl. 7 · Französische Revolution</span>
+        <span class="pill" id="levelPill">Stufe: <b id="levelName">–</b></span>
+      </div>
+    </header>
+
+    <main class="stage" aria-live="polite">
+      <div class="stage-top">
+        <h1 id="stageTitle">Digitaler Lernschritt</h1>
+        <div class="meta">
+          <span class="badge" id="slideCounter">Folie 1 von 15</span>
+          <div class="progress" aria-label="Fortschritt"><div class="bar" id="bar"></div></div>
+        </div>
+      </div>
+
+      <!-- SLIDE 0: LEVEL GATE (must choose level first) -->
+      <section class="slide active" data-n="0">
+        <div class="gate">
+          <div class="card">
+            <div class="kicker"><span class="kdot"></span><span class="tag">Start</span></div>
+            <h2>Bevor du beginnst</h2>
+            <p class="lead">
+              Du brauchst <b>Block und Stift</b>. Notiere gleich die <b>Problemfrage</b> in dein Heft.
+              Am Ende beantwortest du sie.
+            </p>
+
+            <div class="noteBox">
+              <b>Jetzt ins Heft schreiben:</b><br>
+              <span id="gateQuestion">(Problemfrage wird geladen…)</span>
+            </div>
+
+            <div class="callout" style="display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;">
+              <div><b>Lehrkraft:</b> Arbeitsblatt als PDF herunterladen</div>
+              <a class="btn" href="assets/ab/geschichte/7/revolution/revolution_frisst_ihre_kinder_AB.pdf" download>AB (PDF) herunterladen</a>
+            </div>
+            <div class="imgnote" style="text-align:left; margin-top:6px;">PDF einfügen: <code>assets/ab/geschichte/7/revolution/revolution_frisst_ihre_kinder_AB.pdf</code></div>
+
+            <div class="levelgrid" aria-label="Schwierigkeitsstufe wählen">
+              <button class="levelbtn" type="button" data-level="einfach">
+                <b>Einfach</b>
+              </button>
+              <button class="levelbtn" type="button" data-level="standard">
+                <b>Mittel</b>
+              </button>
+              <button class="levelbtn" type="button" data-level="profi">
+                <b>Schwer</b>
+              </button>
+            </div>
+
+            <div class="mini"><b>Wichtig:</b> Alle arbeiten inhaltlich gleich. Nur der Text ist unterschiedlich schwer.</div>
+          </div>
+
+          <div class="card">
+            <h2>Bild (Einstieg)</h2>
+            <div class="imgbox"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARcAAAC1CAIAAAD6EizSAAAQAElEQVR4AZy8B5gk2Vnm+8+Zee65u9y7vWYns0mUUjUkJEVLkqJ2sCk9IBQqQnqEoJQ2JgYkRkFQhQkQkJYkQhCkCkWgkJQk0mQxWbK3vYd7u8u+5v9vH5b6vWb2n2fV9b3r8cXc7+9v7x8fH4fTn8fGxZs2aNWs2aNWs2aNWs2aNWs2aNWs2aNWs2aNWs2aNWs2aNWs2aNWt2qf+v9b8nq7rZxw0cOHDh48ePHiwYMHj3xgZ2dn2+3W6/X6+vr6u7u7nZ2d7e3t9fX1bW1tqamp2tra9vb2hoaGkZGRlZWV2dnZVVVVk5OTa2trc3NzIyMjExMTKysrZ2dnq6urj4+PlZWVnJyc5OTk8PDw9PT0aGhoqKiofHx8tra2+vr6CgoKioqKQkJCEhISWlpZbW1tHR0d7e3t/f39dXV1OTk5SUlJ0dHRNTU1sbGxPT09FRUVhYWFgYGB2dnZlZWVpaWlwcHBdXV1xsbG5ubm0tLS2traWlpa+vr6QkJCDg4Ompqa8vLysrKx0dHSioqKUlJSXl5eQkJCkpKSOjo6pqamrq6uampq6urq6+vr9vb2+vr6ysrKmpqaQkJCEhIS7u7u5ubm0tLSYmJig4ODR0dHk5OTd3d3f39/8/PzOzs7V1dX7+/vJycmZmZm9vb2WlpYcHBwMDAwVFRU0NDQOjo6ampq8vLydnZ2Ojo6SkpKQkJB4eHh7e3t+fn5dXV1nZ2dZWVl9fX1VVVV/f39hYWF9fX1sbGxHR0dbW1t9fX1LS0t+fn5wcHB8fHxycnJgYGBubm5zc3N2dnZ7e3tpaWl+fn5eXl5WVlZvb29RUVF0dHR2dnZ3t7e8vLy8PDw5OTkREREdHR0qKio2NjY8PDw7OzsxMTEeHh4W1tbQ0NDZ2dnS0tLZ2dnY2NjQ0NDb29vGxsZfX19NTU1gYGBRUVFHR0dFRUV9fX1vb29CQkJ7e3t0dHSEhIS6urqsrKx3d3e6urqOjo6Dg4O9vb2lpaW1tbWjo6O5ubmfn5+ZmZmQ0NDQkJCSUlJZ2dnf39/8/Pzv7+/c3Nzi4uL5+fnW1tbd3d3d3d3Q0NDq6urq6urY2NjQ0NDMzMzg4ODT09P4+PjQ0NDz8/Pk5OTycnJJSUlKSkpOjo6bW1tDQ0N0dHR7+/v7e3t5OTk5ubmOjo6bW1tZWVlS0tLS0tLz8/PBwcHf39/NTU1ISEhk5OTlZWVJyclZWVnZ2d+fn5cXFw6Ojo4ODg4ODgqKio7Ozs5OTkqKioiIiIuLi4vLy8RERErKys2NjYkJCQ0NDQfHx8jIyM5OTk3Nzc9PT1NTU0cHBxsbGx/f39cXFwREREbGxsfHx8gICBubm5tbW1hYWFbW1tVVVV1dXW1tbW3t7e7u7vZ2dnz8/PGxsZ7e3t9fX1hYWFoaGh4eHhVVVVpaWm0tLS5ubmHh4eCgoKQkJCsrKycnJzIyMjY2Njg4ODCwsL2dnZ3d3d7e3t4eHh4eHh7e3t7+/v6+vr8/Pz9PT0bGxsjIyM3Nzc2NjY0NDQ2NjY8PDw+Pj42NjY7Ozs6Ojo5OTk4ODg7Ozs8PDw+Pj45OTk7Ozs8PDw/Pz8+Pj46Ojo7Ozs9PT0+Pj47Ozs9PT0/Pz8+Pj46Ojo7Ozs8PDw+Pj45OTk7Ozs8PDw+Pj45OTk7Ozs8PDw+Pj45OTk7Ozs8PDw+Pj45OTk7Ozs8PDw+Pj45OTk7Ozs8PDw+Pj45OTk7Ozs8PDw+Pj45OTk7Ozs8PDw+Pj45OTk7Ozs8PDw+Pj45OTk7Ozs8PDw+Pj45OTk7Ozs8PDw+Pj45OTk7Ozs8PDw+Pj45OTk7Ozs8PDw+Pj45OTk7Ozs8PDw+Pj45OTk7Ozs8PDw+Pj45OTk7Ozs8PDw+Pj45OTk7Ozs8PDw+Pj45OTk7Ozs8PDw+Pj45OTk7Ozs8PDw+Pj45OTk7Ozs8PDw+Pj45OTk7Ozs8PDw+Pj45OTk7Ozs8PDw+Pj45OTk7Ozs8PDw+Pj45OTk7Ozs8PDw+Pj45OTk7Ozs8PDw+Pj45OTk7Ozs8PDw+Pj45OTk7Ozs8PDw+Pj45OTk7Ozs8PDw+Pj45OTk7Ozs8PDw+Pj45OTk7Ozs8PDw+Pj45OTk7Ozs8PDw+Pj45OTk7Ozs8PDw+Pj45OTk7Ozs8PDw+Pj45OTk7Ozs8PDw+Pj45OTk7Ozs8PDw+Pj45OTk7Ozs8PDw+Pj45OTk7Ozs8PDw+Pj45OTk7Ozs8PDw+Pj45OTk7Ozs8PDw+Pj45OTk7Ozs8PDw+Pj45OTk7Ozs8PDw+Pj45OTk7Ozs8PDw+Pj45OTk7Ozs8PDw+Pj45OTk7Ozs8PDw+Pj45OTk7Ozs8PDw+Pj45OTk7Ozs8PDw+Pj45OTk7Ozs8PDw+Pj45OTk7Ozs8PDw+Pj45OTk7Ozs8PDw+Pj45OTk7Ozs8PDw+Pj45OTk7Ozs8PDw+Pj4AAA==" alt="Einstiegsbild: Guillotine/Schreckensherrschaft" loading="eager" decoding="async"></div>
+            <div class="imgnote">Bild einfügen: <code>assets/img/geschichte/7/revolution/einstieg.jpg</code> (Tipp: 1200px Breite)</div>
+
+            <div class="mini">
+              <b>Ziel:</b> Du erklärst die Metapher <b>„Die Revolution frisst ihre Kinder“</b> über die Kette <b>Angst → Verdacht → Terror</b>.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 1: Einstieg -->
+      <section class="slide" data-n="1">
+        <div class="grid">
+          <div class="card">
+            <div class="kicker"><span class="kdot"></span><span class="tag">Einstieg</span></div>
+            <h2 id="s1_title"></h2>
+            <p class="lead" id="s1_text"></p>
+            <div class="callout"><b>Merksatz:</b> Wir erklären die Metapher mit der Kette <b>Angst → Verdacht → Terror</b>.</div>
+            <div class="noteBox" style="margin-top:10px;"><b>Notiere (ins Heft):</b><br><span id="s1_q"></span></div>
+          </div>
+
+          <div class="card">
+            <h2>Bild (Einstieg)</h2>
+            <div class="imgbox"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARcAAAC1CAIAAAD6EizSAAAQAElEQVR4AZy8B5gk2Vnm+8+Zee65u9y7vWYns0mUUjUkJEVLkqJ2sCk9IBQqQnqEoJQ2JgYkRkFQhQkQkJYkQhCkCkWgkJQk0mQxWbK3vYd7u8u+5v9vH5b6vWb2n2fV9b3r8cXc7+9v7x8fH4fTn8fGxZs2aNWs2aNWs2aNWs2aNWs2aNWs2aNWs2aNWs2aNWs2aNWs2aNWt2qf+v9b8nq7rZxw0cOHDh48ePHiwYMHj3xgZ2dn2+3W6/X6+vr6u7u7nZ2d7e3t9fX1bW1tqamp2tra9vb2hoaGkZGRlZWV2dnZVVVVk5OTa2trc3NzIyMjExMTKysrZ2dnq6urj4+PlZWVnJyc5OTk8PDw9PT0aGhoqKiofHx8tra2+vr6CgoKioqKQkJCEhISWlpZbW1tHR0d7e3t/f39dXV1OTk5SUlJ0dHRNTU1sbGxPT09FRUVhYWFgYGB2dnZlZWVpaWlwcHBdXV1xsbG5ubm0tLS2traWlpa+vr6QkJCDg4Ompqa8vLysrKx0dHSioqKUlJSXl5eQkJCkpKSOjo6pqamrq6uampq6urq6+vr9vb2+vr6ysrKmpqaQkJCEhIS7u7u5ubm0tLSYmJig4ODR0dHk5OTd3d3f39/8/PzOzs7V1dX7+/vJycmZmZm9vb2WlpYcHBwMDAwVFRU0NDQOjo6ampq8vLydnZ2Ojo6SkpKQkJB4eHh7e3t+fn5dXV1nZ2dZWVl9fX1VVVV/f39hYWF9fX1sbGxHR0dbW1t9fX1LS0t+fn5wcHB8fHxycnJgYGBubm5zc3N2dnZ7e3tpaWl+fn5eXl5WVlZvb29RUVF0dHR2dnZ3t7e8vLy8PDw5OTkREREdHR0qKio2NjY8PDw7OzsxMTEeHh4W1tbQ0NDZ2dnS0tLZ2dnY2NjQ0NDb29vGxsZfX19NTU1gYGBRUVFHR0dFRUV9fX1vb29CQkJ7e3t0dHSEhIS6urqsrKx3d3e6urqOjo6Dg4O9vb2lpaW1tbWjo6O5ubmfn5+ZmZmQ0NDQkJCSUlJZ2dnf39/8/Pzv7+/c3Nzi4uL5+fnW1tbd3d3d3d3Q0NDq6urq6urY2NjQ0NDMzMzg4ODT09P4+PjQ0NDz8/Pk5OTycnJJSUlKSkpOjo6bW1tDQ0N0dHR7+/v7e3t5OTk5ubmOjo6bW1tZWVlS0tLS0tLz8/PBwcHf39/NTU1ISEhk5OTlZWVJyclZWVnZ2d+fn5cXFw6Ojo4ODg4ODgqKio7Ozs5OTkqKioiIiIuLi4vLy8RERErKys2NjYkJCQ0NDQfHx8jIyM5OTk3Nzc9PT1NTU0cHBxsbGx/f39cXFwREREbGxsfHx8gICBubm5tbW1hYWFbW1tVVVV1dXW1tbW3t7e7u7vZ2dnz8/PGxsZ7e3t9fX1hYWFoaGh4eHhVVVVpaWm0tLS5ubmHh4eCgoKQkJCsrKycnJzIyMjY2Njg4ODCwsL2dnZ3d3d7e3t4eHh4eHh7e3t7+/v6+vr8/Pz9PT0bGxsjIyM3Nzc2NjY0NDQ2NjY8PDw+Pj42NjY7Ozs6Ojo5OTk4ODg7Ozs8PDw+Pj45OTk7Ozs8PDw/Pz8+Pj46Ojo7Ozs9PT0+Pj47Ozs9PT0/Pz8+Pj46Ojo7Ozs8PDw+Pj45OTk7Ozs8PDw+Pj45OTk7Ozs8PDw+Pj45OTk7Ozs8PDw+Pj45OTk7Ozs8PDw+Pj45OTk7Ozs8PDw+Pj45OTk7Ozs8PDw+Pj45OTk7Ozs8PDw+Pj45OTk7Ozs8PDw+Pj4AAA==" alt="Einstiegsbild: Guillotine/Schreckensherrschaft" loading="eager" decoding="async"></div>
+            <div class="imgnote">Bild einfügen: <code>assets/img/geschichte/7/revolution/einstieg.jpg</code> (Tipp: 1200px Breite)</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-n="2">
+        <div class="grid">
+          <div class="card">
+            <div class="kicker"><span class="kdot"></span><span class="tag">Orientierung</span></div>
+            <h2 id="s2_title"></h2>
+            <p class="lead" id="s2_text"></p>
+            <div class="callout"><b>Merke:</b> <span id="s2_merke"></span></div>
+            <div class="chips" id="glossaryChips"></div>
+            <div class="mini"><b>Tipp:</b> Klicke Begriffe an. Du bekommst eine kurze Erklärung + Beispiel.</div>
+          </div>
+          <div class="card">
+            <h2>Bild (Menschenrechte)</h2>
+            <div class="imgbox"><div class="ph">Platzhalter-Bild<br>(Menschen- und Bürgerrechte 1789)</div></div>
+            <div class="imgnote">Bild einfügen: <code>assets/img/geschichte/7/revolution/menschenrechte.jpg</code></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-n="3">
+        <div class="grid">
+          <div class="card">
+            <div class="kicker"><span class="kdot"></span><span class="tag">Kontext</span></div>
+            <h2 id="s3_title"></h2>
+            <p class="lead" id="s3_text"></p>
+            <div class="callout"><b>Schlüsselidee:</b> <span id="s3_key"></span></div>
+          </div>
+          <div class="card">
+            <h2>Bild (Krieg & Angst)</h2>
+            <div class="imgbox"><div class="ph">Platzhalter-Bild<br>(„Patrie en danger“ / Kriegssituation)</div></div>
+            <div class="imgnote">Bild einfügen: <code>assets/img/geschichte/7/revolution/krieg_angst.jpg</code></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-n="4">
+        <div class="grid">
+          <div class="card">
+            <div class="kicker"><span class="kdot"></span><span class="tag">Interaktiv</span></div>
+            <h2>Check 1: Richtig oder falsch?</h2>
+            <p class="lead">Tippe auf eine Antwort. Du bekommst sofort Feedback.</p>
+
+            <div class="qa">
+              <div class="q" data-quiz="tf1">
+                <b>1) „Die Revolution wollte Rechte für alle.“</b>
+                <div class="optrow">
+                  <div class="opt" data-a="richtig">Richtig</div>
+                  <div class="opt" data-a="falsch">Falsch</div>
+                </div>
+                <div class="feedback"></div>
+              </div>
+
+              <div class="q" data-quiz="tf2">
+                <b>2) „Angst kann Menschen misstrauisch machen.“</b>
+                <div class="optrow">
+                  <div class="opt" data-a="richtig">Richtig</div>
+                  <div class="opt" data-a="falsch">Falsch</div>
+                </div>
+                <div class="feedback"></div>
+              </div>
+
+              <div class="q" data-quiz="tf3">
+                <b>3) „Im Terror wurde niemand getötet.“</b>
+                <div class="optrow">
+                  <div class="opt" data-a="richtig">Richtig</div>
+                  <div class="opt" data-a="falsch">Falsch</div>
+                </div>
+                <div class="feedback"></div>
+              </div>
+            </div>
+
+            <div class="callout"><b>Merke:</b> Terror = Angst + schnelle harte Strafen.</div>
+          </div>
+
+          <div class="card">
+            <h2>Bild (Symbol Terror)</h2>
+            <div class="imgbox"><div class="ph">Platzhalter-Bild<br>(Symbol: Guillotine / Tribunal)</div></div>
+            <div class="imgnote">Bild einfügen: <code>assets/img/geschichte/7/revolution/terror_symbol.jpg</code></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-n="5">
+        <div class="grid">
+          <div class="card">
+            <div class="kicker"><span class="kdot"></span><span class="tag">Akteure</span></div>
+            <h2 id="s5_title"></h2>
+            <p class="lead" id="s5_text"></p>
+            <div class="callout"><b>Glossar:</b> <span id="s5_gl"></span></div>
+          </div>
+          <div class="card">
+            <h2>Bild (Jakobiner / Robespierre)</h2>
+            <div class="imgbox"><div class="ph">Platzhalter-Bild<br>(Porträt/Illustration)</div></div>
+            <div class="imgnote">Bild einfügen: <code>assets/img/geschichte/7/revolution/robespierre.jpg</code></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-n="6">
+        <div class="grid">
+          <div class="card">
+            <div class="kicker"><span class="kdot"></span><span class="tag">Interaktiv</span></div>
+            <h2>Check 2: Zuordnung (Teil → Bedeutung)</h2>
+            <p class="lead">Klicke erst links einen Begriff, dann rechts die passende Erklärung.</p>
+
+            <div class="match" data-match="m1">
+              <div class="pick">
+                <h4>Begriffe</h4>
+                <div class="item" data-left="Revolution">Revolution</div>
+                <div class="item" data-left="Terror">Terror</div>
+                <div class="item" data-left="Volksfeind">Volksfeind</div>
+                <div class="item" data-left="Verdacht">Verdacht</div>
+              </div>
+              <div class="pick">
+                <h4>Erklärungen</h4>
+                <div class="item" data-right="großer politischer Umbruch">großer politischer Umbruch</div>
+                <div class="item" data-right="Angstzeit mit harten Strafen">Angstzeit mit harten Strafen</div>
+                <div class="item" data-right="als Feind des Volkes beschuldigt">als Feind des Volkes beschuldigt</div>
+                <div class="item" data-right="Schuld vermutet ohne sicheren Beweis">Schuld vermutet ohne sicheren Beweis</div>
+              </div>
+            </div>
+
+            <div class="mini" id="matchFeedback"><b>Status:</b> <span class="muted">Noch keine Zuordnung.</span></div>
+          </div>
+
+          <div class="card">
+            <h2>Mini-Merksatz</h2>
+            <div class="mini"><b>Merke:</b> Wenn <b>Verdacht</b> wichtiger wird als <b>Beweise</b>, wird es gefährlich.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-n="7">
+        <div class="grid">
+          <div class="card">
+            <div class="kicker"><span class="kdot"></span><span class="tag">Interaktiv</span></div>
+            <h2>Check 3: Warum gab es Terror?</h2>
+            <p class="lead">Wähle die beste Antwort.</p>
+            <div class="q" data-quiz="mcq_terror">
+              <b>Was war ein Hauptgrund?</b>
+              <div class="optrow">
+                <div class="opt" data-a="A">Damit alle mehr Freizeit haben.</div>
+                <div class="opt" data-a="B">Weil viele Angst hatten, die Revolution wird zerstört.</div>
+                <div class="opt" data-a="C">Weil niemand mehr wählen wollte.</div>
+              </div>
+              <div class="feedback"></div>
+            </div>
+            <div class="callout"><b>Merke:</b> Angst + Krieg + Machtkampf = Druck, der Regeln kippen lässt.</div>
+          </div>
+          <div class="card">
+            <h2>Bild (Tribunal)</h2>
+            <div class="imgbox"><div class="ph">Platzhalter-Bild<br>(Revolutionstribunal / Gerichtsszene)</div></div>
+            <div class="imgnote">Bild einfügen: <code>assets/img/geschichte/7/revolution/tribunal.jpg</code></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-n="8">
+        <div class="grid">
+          <div class="card">
+            <div class="kicker"><span class="kdot"></span><span class="tag">Begriff & Wirkung</span></div>
+            <h2 id="s8_title"></h2>
+            <p class="lead" id="s8_text"></p>
+            <div class="callout"><b>Glossar:</b> <span id="s8_gl"></span></div>
+          </div>
+          <div class="card">
+            <h2>Bild (Verdacht)</h2>
+            <div class="imgbox"><div class="ph">Platzhalter-Bild<br>(Symbol: Stempel/Anklage)</div></div>
+            <div class="imgnote">Bild einfügen: <code>assets/img/geschichte/7/revolution/verdacht.jpg</code></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-n="9">
+        <div class="grid">
+          <div class="card">
+            <div class="kicker"><span class="kdot"></span><span class="tag">Kausal-Kette (Hauptidee)</span></div>
+            <h2>Die Kette: Angst → Verdacht → Terror</h2>
+            <p class="lead">Klicke die drei Stationen. Nach jeder Station kommt ein Mini-Check.</p>
+
+            <div class="chain" id="chain">
+              <div class="node" data-node="angst"><div class="left"><span class="dot warn"></span><b>Angst</b></div><small>Was macht Angst mit Entscheidungen?</small></div>
+              <div class="node" data-node="verdacht"><div class="left"><span class="dot"></span><b>Verdacht</b></div><small>Was passiert ohne Beweise?</small></div>
+              <div class="node" data-node="terror"><div class="left"><span class="dot bad"></span><b>Terror / Gewalt</b></div><small>Welche Folgen hat das?</small></div>
+            </div>
+
+            <div class="mini" id="chainBox"><b>Hinweis:</b> Wähle zuerst eine Station.</div>
+          </div>
+
+          <div class="card">
+            <h2>Grafik (Spirale der Gewalt)</h2>
+            <div class="imgbox">
+              <svg width="100%" height="220" viewBox="0 0 520 220" aria-label="Spirale der Gewalt" role="img">
+                <defs>
+                  <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0" stop-color="rgba(124,92,255,.95)"/>
+                    <stop offset="1" stop-color="rgba(59,208,143,.85)"/>
+                  </linearGradient>
+                </defs>
+                <path d="M70,150 C140,40 340,30 410,105 C470,170 355,205 285,168 C210,130 240,70 300,72 C355,74 365,120 335,134 C305,150 280,140 275,123" fill="none" stroke="url(#g1)" stroke-width="6" stroke-linecap="round"/>
+                <circle cx="110" cy="120" r="12" fill="rgba(255,204,102,.95)"/>
+                <circle cx="310" cy="78" r="12" fill="rgba(124,92,255,.95)"/>
+                <circle cx="340" cy="140" r="12" fill="rgba(255,92,122,.95)"/>
+                <text x="128" y="126" fill="rgba(233,238,246,.9)" font-size="14">Angst</text>
+                <text x="330" y="84" fill="rgba(233,238,246,.9)" font-size="14">Verdacht</text>
+                <text x="358" y="146" fill="rgba(233,238,246,.9)" font-size="14">Terror</text>
+                <text x="16" y="26" fill="rgba(166,176,192,.85)" font-size="12">Schema (intern): Ursache → Wirkung → Eskalation</text>
+              </svg>
+            </div>
+            <div class="imgnote">Bild einfügen: <code>assets/img/geschichte/7/revolution/terror_schema.svg</code> (optional ersetzen)</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-n="10">
+        <div class="grid">
+          <div class="card">
+            <div class="kicker"><span class="kdot"></span><span class="tag">Metapher</span></div>
+            <h2 id="s10_title"></h2>
+            <p class="lead" id="s10_text"></p>
+            <div class="callout"><b>Merke:</b> <span id="s10_merke"></span></div>
+          </div>
+          <div class="card">
+            <h2>Bild (Metapher)</h2>
+            <div class="imgbox"><div class="ph">Platzhalter-Bild<br>(Symbol „Bewegung richtet sich gegen eigene Leute“)</div></div>
+            <div class="imgnote">Bild einfügen: <code>assets/img/geschichte/7/revolution/metapher.jpg</code></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-n="11">
+        <div class="grid">
+          <div class="card">
+            <div class="kicker"><span class="kdot"></span><span class="tag">Beispiel</span></div>
+            <h2 id="s11_title"></h2>
+            <p class="lead" id="s11_text"></p>
+            <div class="callout"><b>Wozu das Beispiel?</b> Es zeigt, dass Loyalität wichtiger wurde als Rechte.</div>
+          </div>
+          <div class="card">
+            <h2>Bild (Danton)</h2>
+            <div class="imgbox"><div class="ph">Platzhalter-Bild<br>(Porträt/Illustration Danton)</div></div>
+            <div class="imgnote">Bild einfügen: <code>assets/img/geschichte/7/revolution/danton.jpg</code></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-n="12">
+        <div class="grid">
+          <div class="card">
+            <div class="kicker"><span class="kdot"></span><span class="tag">Interaktiv</span></div>
+            <h2>Check 4: Reihenfolge (Kette)</h2>
+            <p class="lead">Bringe die drei Schritte in die richtige Reihenfolge.</p>
+
+            <div class="q" data-quiz="order1">
+              <b>Was kommt zuerst?</b>
+              <div class="optrow">
+                <div class="opt" data-a="A">Terror / Gewalt</div>
+                <div class="opt" data-a="B">Angst</div>
+                <div class="opt" data-a="C">Verdacht</div>
+              </div>
+              <div class="feedback"></div>
+            </div>
+
+            <div class="q" data-quiz="order2">
+              <b>Was kommt danach?</b>
+              <div class="optrow">
+                <div class="opt" data-a="A">Verdacht</div>
+                <div class="opt" data-a="B">Angst</div>
+                <div class="opt" data-a="C">Rechte für alle</div>
+              </div>
+              <div class="feedback"></div>
+            </div>
+
+            <div class="q" data-quiz="order3">
+              <b>Was ist am Ende die Folge?</b>
+              <div class="optrow">
+                <div class="opt" data-a="A">Terror / Gewalt</div>
+                <div class="opt" data-a="B">Freizeit</div>
+                <div class="opt" data-a="C">keine Regeln mehr</div>
+              </div>
+              <div class="feedback"></div>
+            </div>
+
+            <div class="mini"><b>Merksatz:</b> Angst macht misstrauisch → Verdacht wächst → Gewalt wird „normal“.</div>
+          </div>
+          <div class="card">
+            <h2>Perspektiven-Karten (kurz)</h2>
+            <div class="two">
+              <div class="card" style="padding:12px;"><b>Jakobiner</b><p class="lead" style="margin:8px 0 0">„Wir müssen die Revolution schützen – notfalls hart.“</p></div>
+              <div class="card" style="padding:12px;"><b>Bürger</b><p class="lead" style="margin:8px 0 0">„Ich habe Angst. Ich will Sicherheit.“</p></div>
+              <div class="card" style="padding:12px;"><b>Gemäßigter Revolutionär</b><p class="lead" style="margin:8px 0 0">„Rechte dürfen nicht einfach verschwinden.“</p></div>
+              <div class="card" style="padding:12px;"><b>Beobachter</b><p class="lead" style="margin:8px 0 0">„Wer nicht passt, wird verdächtigt.“</p></div>
+            </div>
+            <div class="mini"><b>Didaktischer Kniff:</b> Gleiche Ereignisse – unterschiedliche Blickwinkel.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-n="13">
+        <div class="grid">
+          <div class="card">
+            <div class="kicker"><span class="kdot"></span><span class="tag">Zusammenhang</span></div>
+            <h2 id="s13_title"></h2>
+            <p class="lead" id="s13_text"></p>
+            <div class="callout"><b>Merke:</b> <span id="s13_merke"></span></div>
+          </div>
+          <div class="card">
+            <h2>Bild (Waage Rechte vs. Angst)</h2>
+            <div class="imgbox"><div class="ph">Platzhalter-Bild<br>(Waage: „Angst“ vs „Rechte“)</div></div>
+            <div class="imgnote">Bild einfügen: <code>assets/img/geschichte/7/revolution/waage.jpg</code></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-n="14">
+        <div class="grid">
+          <div class="card">
+            <div class="kicker"><span class="kdot"></span><span class="tag">Interaktiv</span></div>
+            <h2>Check 5: Ein Satz reicht</h2>
+            <p class="lead">Schreibe 1 Satz. Vergleiche dann mit der Musterlösung (nur Hilfe, kein Muss).</p>
+
+            <div class="q">
+              <b>Warum „frisst“ die Revolution eigene Leute?</b>
+              <div class="optrow" style="flex-direction:column; align-items:stretch">
+                <textarea id="oneSentence" rows="3" style="width:100%; border-radius:14px; border:1px solid var(--line); background:rgba(255,255,255,.02); color:var(--text); padding:10px; font:inherit; resize:vertical" placeholder="Schreibe hier 1 Satz..."></textarea>
+                <button class="btn" id="showModel" type="button">Musterlösung anzeigen</button>
+              </div>
+              <div class="feedback" id="modelBox" style="display:none;"></div>
+            </div>
+
+            <div class="callout"><b>Stop-Moment:</b> Notiere 3 Stichpunkte ins Heft, bevor du weiterklickst.</div>
+          </div>
+
+          <div class="card">
+            <h2>Mini-Checkliste (fürs Heft)</h2>
+            <div class="mini">Schreibe ins Heft:<br>• 1 Stichwort zu <b>Angst</b><br>• 1 Stichwort zu <b>Verdacht</b><br>• 1 Stichwort zu <b>Terror</b></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 15: Analog + answer problem question -->
+      <section class="slide" data-n="15">
+        <div class="card">
+          <div class="kicker"><span class="kdot"></span><span class="tag">Analog – Block & Stift</span></div>
+          <h2>Jetzt ohne iPad: Aufgaben im Heft/Block</h2>
+          <p class="lead">
+            Du brauchst nur Block und Stift. Nutze die Hilfe hier. <b>Beantworte am Ende die Problemfrage</b>, die du am Anfang notiert hast.
+          </p>
+
+          <div class="helpbox">
+            <h3>HILFE / Nachschlagen (schreibe es dir kurz ins Heft)</h3>
+            <div class="helpbox cols">
+              <div><ul id="helpBullets"></ul></div>
+              <div class="starter" id="helpStarters"></div>
+            </div>
+            <div class="mini" style="margin-top:10px;"><b>Checkliste:</b> ☐ Angst ☐ Verdacht ☐ Terror ☐ mit „weil“ (wenn möglich)</div>
+          </div>
+
+          <div class="tasks" id="analogTasks"></div>
+
+          <div class="noteBox" style="margin-top:12px;">
+            <b>Zum Schluss (ins Heft):</b><br>
+            <span class="muted">Beantworte die Problemfrage, die du am Anfang aufgeschrieben hast.</span>
+          </div>
+
+          <footer>© BoWi Lernraum | Statisch, datenschutzfreundlich, ohne Tracking.</footer>
+        </div>
+      </section>
+
+      <div class="btnrow">
+        <button class="btn" id="prevBtn" type="button" aria-label="Zurück">← Zurück</button>
+        <button class="btn" id="levelBtn" type="button" aria-label="Zurück zur Stufenauswahl">↺ Stufe wählen</button>
+        <div class="pill" id="hintPill">Tipp: Begriffe anklicken = Hilfe</div>
+        <button class="btn primary" id="nextBtn" type="button" aria-label="Weiter">Weiter →</button>
+      </div>
+    </main>
+
+    <dialog id="glossaryModal">
+      <div class="modal">
+        <h3 id="glTitle">Begriff</h3>
+        <button class="close" id="glClose" type="button">Schließen</button>
+      </div>
+      <div class="modal-body" id="glBody"></div>
+    </dialog>
+  </div>
+
+  <script>
+    const slidesTotal = 15;
+    let current = 0; // start at gate
+    let level = null; // must choose
+
+    const CONTENT = {
+      meta: {
+        subject: "Geschichte",
+        grade: "7",
+        series: "Französische Revolution",
+        topic: "Die Revolution frisst ihre Kinder",
+        guidingQuestion: "Warum werden in einer Revolution Menschen bestraft, die vorher für Freiheit gekämpft haben?"
+      },
+      slides: {
+        1: {
+          title: "Die Revolution frisst ihre Kinder",
+          text: {
+            einfach: "Erst wollten viele Freiheit. Dann kam Angst. Menschen wurden schnell beschuldigt. Auch Freunde wurden bestraft.",
+            standard: "Erst ging es um Freiheit und Rechte. Dann gab es Krieg und Angst. Dann wurden sogar frühere Helfer bestraft.",
+            profi: "In der Krise wächst Angst. Verdacht zählt mehr als Beweise. Dann trifft es sogar Mitstreiter."
+          },
+          q: "Wie kann eine Revolution eigene Mitstreiter bestrafen?"
+        },
+        2: {
+          title: "Worum ging es am Anfang?",
+          text: {
+            einfach: "Viele wollten: König weniger Macht. Menschen mehr Rechte.",
+            standard: "Viele wollten weniger Königs-Macht und mehr Rechte (Menschenrechte).",
+            profi: "Start: mehr Rechte. Später: Angst und Streit drücken diese Rechte."
+          },
+          merke: "Idee: Rechte. Gefahr: Angst."
+        },
+        3: {
+          title: "Warum wurde alles so angespannt?",
+          text: {
+            einfach: "Krieg und Unruhe. Viele hatten Angst.",
+            standard: "Krieg und Unruhe machten Angst. Dann wurden Regeln härter.",
+            profi: "Bei Krieg steigt der Druck. Menschen wollen Sicherheit. Verdacht wächst."
+          },
+          key: "Krise → Angst → harte Entscheidungen."
+        },
+        5: {
+          title: "Wer waren die Jakobiner?",
+          text: {
+            einfach: "Jakobiner = Gruppe. Sie wollten streng sein. Robespierre war wichtig.",
+            standard: "Jakobiner: Gruppe in Paris. Sie wollte die Revolution mit Härte schützen. Robespierre war wichtig.",
+            profi: "Jakobiner wollten Ordnung durch Härte. Kritik galt schnell als Gefahr."
+          },
+          gl: "Jakobiner = Gruppe, die die Revolution sehr streng schützen wollte."
+        },
+        8: {
+          title: "Verdacht und ‚Volksfeinde‘",
+          text: {
+            einfach: "‚Volksfeind‘ hieß: Du bist gegen das Volk. Oft reichte ein Gerücht.",
+            standard: "‚Volksfeind‘ war ein gefährliches Wort. Oft reichten Gerüchte.",
+            profi: "‚Volksfeind‘ machte Menschen zu Zielen. In Angstzeiten wird schnell verdächtigt."
+          },
+          gl: "Volksfeind = als Feind der Revolution beschuldigt."
+        },
+        10: {
+          title: "Was bedeutet die Metapher?",
+          text: {
+            einfach: "Auch eigene Leute werden bestraft. Darum sagt man: Die Revolution frisst ihre Kinder.",
+            standard: "Die Revolution wird so hart, dass sie auch frühere Helfer bestraft.",
+            profi: "Wenn Angst stärker ist als Rechte, trifft es sogar Revolutionäre."
+          },
+          merke: "Angst kann Rechte kaputt machen."
+        },
+        11: {
+          title: "Beispiel: Danton",
+          text: {
+            einfach: "Danton half am Anfang. Später wurde er getötet.",
+            standard: "Danton war zuerst dabei. Später wurde er als Gegner behandelt und hingerichtet.",
+            profi: "Danton zeigt: Heute Freund, morgen Feind – wenn Verdacht herrscht."
+          }
+        },
+        13: {
+          title: "Warum kippen Rechte?",
+          text: {
+            einfach: "Bei Angst zählt Sicherheit. Rechte werden kleiner.",
+            standard: "Wenn Angst groß ist, wird Sicherheit wichtiger. Rechte werden weniger.",
+            profi: "Angst verschiebt Grenzen: Sicherheit vor Freiheit. Verdacht ersetzt Beweise."
+          },
+          merke: "Angst + Verdacht = weniger Rechte."
+        }
+      },
+      glossary: [
+        {term:"Revolution", easy:"Große Veränderung.", std:"Große Veränderung in Politik.", pro:"Macht und Regeln ändern sich stark."},
+        {term:"Jakobiner", easy:"Strenge Revolutions-Gruppe.", std:"Strenge Gruppe in Paris.", pro:"Gruppe, die die Revolution mit Härte schützen wollte."},
+        {term:"Terror", easy:"Angstzeit mit harten Strafen.", std:"Zeit mit Angst und harten Strafen.", pro:"Zeit: viele Verdächtigungen, schnelle harte Strafen."},
+        {term:"Guillotine", easy:"Fallbeil.", std:"Fallbeil (Strafe).", pro:"Fallbeil; oft als Strafe benutzt."},
+        {term:"Verdacht", easy:"Beschuldigung ohne Beweis.", std:"Schuld wird vermutet.", pro:"Misstrauen ersetzt Beweise."},
+        {term:"Volksfeind", easy:"Als Feind beschuldigt.", std:"Als Gegner der Revolution bezeichnet.", pro:"Etikett, das jemanden zum Ziel macht."},
+        {term:"Menschenrechte", easy:"Rechte für alle.", std:"Grundrechte für jeden.", pro:"Rechte, die für alle gelten sollen."},
+        {term:"Macht", easy:"Wer bestimmt.", std:"Wer entscheidet.", pro:"Wer Regeln und Strafen festlegt."},
+        {term:"Angst", easy:"Sorge vor Gefahr.", std:"Unsicherheit und Sorge.", pro:"Gefühl, das Entscheidungen härter macht."}
+      ]
+    };
+
+    const quizKey = {
+      warmup: "B",
+      tf1: "richtig",
+      tf2: "richtig",
+      tf3: "falsch",
+      mcq_terror: "B",
+      order1: "B",
+      order2: "A",
+      order3: "A"
+    };
+
+    const $ = (sel, root=document) => root.querySelector(sel);
+    const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
+
+    function escapeHtml(s){
+      return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
+    }
+
+    function setLevelPill(){
+      const nameMap = {einfach:"Einfach", standard:"Mittel", profi:"Schwer"};
+      $("#levelName").textContent = level ? nameMap[level] : "–";
+    }
+
+    function updateTop(){
+      const count = current===0 ? "Start" : `Folie ${current} von ${slidesTotal}`;
+      $("#slideCounter").textContent = count;
+      const pct = current===0 ? 0 : Math.round((current-1)/(slidesTotal-1)*100);
+      $("#bar").style.width = `${pct}%`;
+
+      $("#prevBtn").disabled = (current===0);
+      $("#nextBtn").disabled = (current===slidesTotal);
+
+      const hints = [
+        "Tipp: Erst Stufe wählen",
+        "Tipp: Begriffe anklicken = Hilfe",
+        "Tipp: Lies die Merke-Box",
+        "Tipp: Notiere 3 Stichpunkte vor Slide 15"
+      ];
+      const idx = current===0 ? 0 : Math.min(3, Math.floor((current-1)/4)+1);
+      $("#hintPill").textContent = hints[idx];
+
+      setLevelPill();
+    }
+
+    function showSlide(n){
+      current = n;
+      $$(".slide").forEach(s => s.classList.remove("active"));
+      $(`.slide[data-n="${n}"]`).classList.add("active");
+      updateTop();
+    }
+
+    function t(obj){
+      if(!obj) return "";
+      return obj[level] ?? obj.standard ?? "";
+    }
+
+    function renderText(){
+      if(!level) return;
+
+      // gate question
+      $("#gateQuestion").textContent = CONTENT.meta.guidingQuestion;
+
+      // slide 1
+      $("#s1_title").textContent = CONTENT.slides[1].title;
+      $("#s1_text").textContent  = t(CONTENT.slides[1].text);
+      $("#s1_q").textContent     = CONTENT.slides[1].q;
+
+      // slide 2
+      $("#s2_title").textContent = CONTENT.slides[2].title;
+      $("#s2_text").textContent  = t(CONTENT.slides[2].text);
+      $("#s2_merke").textContent = CONTENT.slides[2].merke;
+
+      // slide 3
+      $("#s3_title").textContent = CONTENT.slides[3].title;
+      $("#s3_text").textContent  = t(CONTENT.slides[3].text);
+      $("#s3_key").textContent   = CONTENT.slides[3].key;
+
+      // slide 5
+      $("#s5_title").textContent = CONTENT.slides[5].title;
+      $("#s5_text").textContent  = t(CONTENT.slides[5].text);
+      $("#s5_gl").textContent    = CONTENT.slides[5].gl;
+
+      // slide 8
+      $("#s8_title").textContent = CONTENT.slides[8].title;
+      $("#s8_text").textContent  = t(CONTENT.slides[8].text);
+      $("#s8_gl").textContent    = CONTENT.slides[8].gl;
+
+      // slide 10
+      $("#s10_title").textContent = CONTENT.slides[10].title;
+      $("#s10_text").textContent  = t(CONTENT.slides[10].text);
+      $("#s10_merke").textContent = CONTENT.slides[10].merke;
+
+      // slide 11
+      $("#s11_title").textContent = CONTENT.slides[11].title;
+      $("#s11_text").textContent  = t(CONTENT.slides[11].text);
+
+      // slide 13
+      $("#s13_title").textContent = CONTENT.slides[13].title;
+      $("#s13_text").textContent  = t(CONTENT.slides[13].text);
+      $("#s13_merke").textContent = CONTENT.slides[13].merke;
+
+      // Glossary chips
+      const chips = $("#glossaryChips");
+      chips.innerHTML = "";
+      CONTENT.glossary.forEach(g => {
+        const c = document.createElement("button");
+        c.type = "button";
+        c.className = "chip";
+        c.textContent = g.term;
+        c.addEventListener("click", () => openGlossary(g.term));
+        chips.appendChild(c);
+      });
+
+      renderAnalog();
+    }
+
+    // Glossary modal
+    const modal = $("#glossaryModal");
+    function exampleFor(term){
+      const map = {
+        "Revolution": "Zum Beispiel: Der König verliert Macht, neue Regeln entstehen.",
+        "Jakobiner": "Zum Beispiel: Eine Gruppe fordert harte Maßnahmen gegen Gegner.",
+        "Terror": "Zum Beispiel: Menschen werden schnell verhaftet und bestraft.",
+        "Guillotine": "Zum Beispiel: Das Fallbeil wird als Strafe eingesetzt.",
+        "Verdacht": "Zum Beispiel: Jemand wird beschuldigt, ohne sicheren Beweis.",
+        "Volksfeind": "Zum Beispiel: Eine Person wird als Gegner des Volkes dargestellt.",
+        "Menschenrechte": "Zum Beispiel: Alle Menschen sollen gleiche Rechte haben.",
+        "Macht": "Zum Beispiel: Wer entscheidet über Gesetze und Strafen.",
+        "Angst": "Zum Beispiel: Krieg und Unruhe machen viele unsicher."
+      };
+      return map[term] || "Beispiel folgt.";
+    }
+    function openGlossary(term){
+      const entry = CONTENT.glossary.find(x => x.term === term);
+      if(!entry) return;
+      $("#glTitle").textContent = term;
+      const txt = (level === "einfach") ? entry.easy : (level === "profi") ? entry.pro : entry.std;
+      $("#glBody").innerHTML = `
+        <p><b>Erklärung:</b> ${escapeHtml(txt)}</p>
+        <p><b>Beispiel:</b> ${exampleFor(term)}</p>
+        <p class="muted">Tipp: Nutze den Begriff später in Slide 15.</p>
+      `;
+      modal.showModal();
+    }
+    $("#glClose").addEventListener("click", () => modal.close());
+    modal.addEventListener("click", (e) => {
+      const rect = modal.getBoundingClientRect();
+      const inDialog = (rect.top <= e.clientY && e.clientY <= rect.bottom && rect.left <= e.clientX && e.clientX <= rect.right);
+      if(!inDialog) modal.close();
+    });
+
+    // Quizzes
+    function feedbackFor(id, ok){
+      const f = {
+        warmup: ok ? "Genau: Revolution = großer Umbruch (oft mit Konflikten)." : "Nope: Revolution hat mit Politik/Macht zu tun.",
+        tf1: ok ? "Richtig: Rechte für alle waren zentrale Ideen." : "Nicht ganz: Genau das war eine wichtige Idee.",
+        tf2: ok ? "Richtig: Angst kann Misstrauen und Härte verstärken." : "Nicht ganz: Angst verändert Entscheidungen.",
+        tf3: ok ? "Nicht ganz: Im Terror wurden viele Menschen getötet." : "Richtig: Im Terror starben viele.",
+        mcq_terror: ok ? "Ja: Angst vor Feinden/Verrätern war ein Hauptgrund." : "Nein: Entscheidend war die Angst, die Revolution könnte scheitern.",
+        order1: ok ? "Ja: Erst kommt Angst." : "Noch nicht: Die Kette startet mit Angst.",
+        order2: ok ? "Ja: Danach wächst Verdacht." : "Noch nicht: Nach Angst kommt Verdacht.",
+        order3: ok ? "Ja: Am Ende folgt Terror/Gewalt." : "Noch nicht: Am Ende steht Terror/Gewalt."
+      };
+      return f[id] || (ok ? "Richtig." : "Nicht richtig.");
+    }
+
+    function applyQuizHandlers(){
+      $$(".q[data-quiz]").forEach(q => {
+        const id = q.getAttribute("data-quiz");
+        const fb = $(".feedback", q);
+        $$(".opt", q).forEach(opt => {
+          opt.addEventListener("click", () => {
+            const a = opt.getAttribute("data-a");
+            const correct = (a === quizKey[id]);
+            $$(".opt", q).forEach(o => o.classList.remove("good", "bad"));
+            opt.classList.add(correct ? "good" : "bad");
+            fb.textContent = feedbackFor(id, correct);
+          });
+        });
+      });
+
+      $("#showModel").addEventListener("click", () => {
+        const box = $("#modelBox");
+        box.style.display = "block";
+        box.textContent = "Musterlösung: Weil Angst groß war, wurden Menschen schnell verdächtigt. Dann gab es harte Strafen – auch gegen frühere Mitstreiter.";
+      });
+    }
+
+    // Matching
+    function applyMatching(){
+      const root = $('[data-match="m1"]');
+      if(!root) return;
+
+      let selectedLeft = null;
+      const pairs = {
+        "Revolution": "großer politischer Umbruch",
+        "Terror": "Angstzeit mit harten Strafen",
+        "Volksfeind": "als Feind des Volkes beschuldigt",
+        "Verdacht": "Schuld vermutet ohne sicheren Beweis"
+      };
+      const matched = new Set();
+
+      const leftItems = $$('[data-left]', root);
+      const rightItems = $$('[data-right]', root);
+
+      function setStatus(){
+        const fb = $("#matchFeedback");
+        if(matched.size === 0){
+          fb.innerHTML = "<b>Status:</b> <span class='muted'>Noch keine Zuordnung.</span>";
+          return;
+        }
+        if(matched.size < Object.keys(pairs).length){
+          fb.innerHTML = `<b>Status:</b> <span class='muted'>${matched.size}/${Object.keys(pairs).length} richtig zugeordnet.</span>`;
+          return;
+        }
+        fb.innerHTML = "<b>Status:</b> <span style='color:var(--good)'>Alles korrekt! ✅</span>";
+      }
+
+      leftItems.forEach(li => li.addEventListener("click", () => {
+        if(li.classList.contains("locked")) return;
+        leftItems.forEach(x => x.classList.remove("selected"));
+        li.classList.add("selected");
+        selectedLeft = li.getAttribute("data-left");
+      }));
+
+      rightItems.forEach(ri => ri.addEventListener("click", () => {
+        if(ri.classList.contains("locked")) return;
+        if(!selectedLeft) return;
+
+        const right = ri.getAttribute("data-right");
+        const need = pairs[selectedLeft];
+
+        rightItems.forEach(x => x.classList.remove("good","bad"));
+        ri.classList.add(right === need ? "good" : "bad");
+
+        if(right === need){
+          matched.add(selectedLeft);
+          const li = leftItems.find(x => x.getAttribute("data-left") === selectedLeft);
+          li.classList.remove("selected");
+          li.classList.add("locked");
+          ri.classList.add("locked");
+          selectedLeft = null;
+          setStatus();
+        } else {
+          const fb = $("#matchFeedback");
+          fb.innerHTML = "<b>Status:</b> <span style='color:var(--warn)'>Fast. Versuche es nochmal.</span>";
+        }
+      }));
+
+      setStatus();
+    }
+
+    // Chain
+    function applyChain(){
+      const box = $("#chainBox");
+      $("#chain").addEventListener("click", (e) => {
+        const node = e.target.closest(".node");
+        if(!node) return;
+        const k = node.getAttribute("data-node");
+        const data = chainData(k);
+        box.innerHTML = `<b>${data.title}</b><br>${data.text}<div style="margin-top:8px;"><span class="tag">Mini-Check</span> ${data.check}</div>`;
+      });
+
+      function chainData(k){
+        if(k === "angst"){
+          return {
+            title:"Angst",
+            text: (level === "einfach")
+              ? "Angst macht unsicher. Viele wollen schnelle Sicherheit."
+              : (level === "profi")
+                ? "Angst: Sicherheit wird wichtiger als Freiheit."
+                : "Angst macht Entscheidungen härter. Sicherheit wirkt wichtiger.",
+            check: "Was wird bei Angst oft wichtiger: <b>Sicherheit</b> oder <b>Freiheit</b>?"
+          };
+        }
+        if(k === "verdacht"){
+          return {
+            title:"Verdacht",
+            text: (level === "einfach")
+              ? "Ohne Beweise kann man schnell jemanden beschuldigen."
+              : (level === "profi")
+                ? "Verdacht ersetzt Beweise. Dann kann fast jeder Ziel werden."
+                : "Wenn Verdacht reicht, kann jeder schnell als Feind gelten.",
+            check: "Reicht ein <b>Gerücht</b>, um jemanden zu bestrafen?"
+          };
+        }
+        return {
+          title:"Terror / Gewalt",
+          text: (level === "einfach")
+            ? "Harte Strafen machen allen Angst. Das nennt man Terror."
+            : (level === "profi")
+              ? "Terror: harte Strafen sollen alle einschüchtern."
+              : "Im Terror gibt es schnelle Urteile und harte Strafen.",
+          check: "Was passiert mit <b>Rechten</b>, wenn Terror herrscht?"
+        };
+      }
+    }
+
+    // Analog help + tasks
+    function renderAnalog(){
+      const bullets = $("#helpBullets");
+      const starters = $("#helpStarters");
+      bullets.innerHTML = "";
+
+      const pack = {
+        einfach: {
+          bullets: [
+            "Kette: <b>Angst → Verdacht → Terror</b>",
+            "Angst: Menschen wollen Sicherheit.",
+            "Verdacht: Beschuldigung ohne Beweis.",
+            "Terror: harte Strafen machen Angst.",
+            "Metapher: Auch eigene Leute werden bestraft."
+          ],
+          starters: "<b>Wortbank:</b> Angst, Verdacht, Terror, Rechte, Beweis, Krieg<br><br><b>Satzstarter:</b><br>• Ich denke: …<br>• Weil …, deshalb …"
+        },
+        standard: {
+          bullets: [
+            "Kette: <b>Angst → Verdacht → Terror</b>",
+            "Angst macht Regeln härter.",
+            "Verdacht ersetzt Beweise.",
+            "‚Volksfeind‘ macht Menschen zu Zielen.",
+            "Metapher: Revolution bestraft frühere Helfer."
+          ],
+          starters: "<b>Satzstarter:</b><br>• Zuerst …, dann …, am Ende …<br>• Weil …, deshalb …"
+        },
+        profi: {
+          bullets: [
+            "Krise: Sicherheit wird wichtiger als Freiheit.",
+            "Kette: <b>Angst → Verdacht → Terror</b>",
+            "Worte können gefährlich sein (‚Volksfeind‘).",
+            "Rechte verlieren Schutzwirkung.",
+            "Metapher: Bewegung richtet sich gegen eigene Leute."
+          ],
+          starters: "<b>Satzstarter:</b><br>• Ich begründe das so: … weil …<br>• Das sieht man daran, dass …"
+        }
+      };
+
+      pack[level].bullets.forEach(li => {
+        const el = document.createElement("li");
+        el.innerHTML = li;
+        bullets.appendChild(el);
+      });
+      starters.innerHTML = pack[level].starters;
+
+      const host = $("#analogTasks");
+      host.innerHTML = "";
+
+      const tasks = {
+        einfach: [
+          {label:"Pflicht", op:"SCHREIBE", text:"Schreibe ins Heft: <b>Angst – Verdacht – Terror</b>. Schreibe zu jedem Wort <b>1 Beispielwort</b> (z. B. Angst: Krieg)."},
+          {label:"Wahl", op:"ORDNE", text:"Schreibe die Kette ins Heft: <b>Angst → Verdacht → Terror</b>. Schreibe zu jedem Pfeil <b>1 kurzen Satz</b> (oder 3–5 Wörter)."},
+          {label:"Kreativ", op:"ZEICHNE", text:"Zeichne 3 Kästchen: <b>Angst → Verdacht → Terror</b>. In jedes Kästchen kommt <b>ein Symbol</b>."},
+          {label:"Zum Schluss", op:"ANTWORTE", text:"Beantworte die <b>Problemfrage</b> in <b>2 kurzen Sätzen</b>. Satzstarter: „Ich denke: … Weil …“"}
+        ],
+        standard: [
+          {label:"Pflicht", op:"ERKLÄRE", text:"Erkläre kurz (je <b>1 Satz</b>): <b>Verdacht</b>, <b>Terror</b>, <b>Volksfeind</b>, <b>Jakobiner</b>."},
+          {label:"Wahl", op:"ERKLÄRE", text:"Erkläre die Kette <b>Angst → Verdacht → Terror</b> in <b>3 Sätzen</b>. Nutze 1× „weil“ oder „deshalb“."},
+          {label:"Kreativ", op:"SCHREIBE", text:"Schreibe eine kurze Überschrift (Zeitung) + <b>1 Satz</b> dazu."},
+          {label:"Zum Schluss", op:"ANTWORTE", text:"Beantworte die <b>Problemfrage</b> in <b>3 Sätzen</b> (mit der Kette)."}
+        ],
+        profi: [
+          {label:"Pflicht", op:"ERKLÄRE", text:"Erkläre die Metapher in <b>3–4 Sätzen</b> und nutze <b>Angst</b>, <b>Verdacht</b>, <b>Rechte</b>."},
+          {label:"Wahl", op:"BEGRÜNDE", text:"Begründe in <b>4–5 Sätzen</b>, warum Verdacht in Krisen wächst. Nutze 1× „weil“."},
+          {label:"Kreativ", op:"BEURTEILE", text:"Beurteile in <b>2 Sätzen</b>: „Sicherheit ist wichtiger als Freiheit.“ Nutze „weil“."},
+          {label:"Zum Schluss", op:"ANTWORTE", text:"Beantworte die <b>Problemfrage</b> in <b>4 Sätzen</b> (Angst → Verdacht → Terror)."}
+        ]
+      };
+
+      tasks[level].forEach(t => {
+        const box = document.createElement("div");
+        box.className = "t";
+        box.innerHTML = `
+          <b>${t.label}</b>
+          <div class="muted" style="margin-bottom:8px;"><span class="op">(${t.op})</span> <span>Nur Block & Stift.</span></div>
+          <div class="lead" style="margin:0">${t.text}</div>
+        `;
+        host.appendChild(box);
+      });
+    }
+
+    // Gate level selection
+    function applyGate(){
+      $("#gateQuestion").textContent = CONTENT.meta.guidingQuestion;
+      $$(".levelbtn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          level = btn.getAttribute("data-level");
+          renderText();
+          setLevelPill();
+          showSlide(1);
+        });
+      });
+    }
+
+    // Navigation
+    $("#prevBtn").addEventListener("click", () => {
+      if(current === 0) return;
+      showSlide(Math.max(0, current - 1));
+    });
+
+    // Back to level gate
+    $("#levelBtn").addEventListener("click", () => {
+      level = null;
+      setLevelPill();
+      showSlide(0);
+    });
+
+    $("#nextBtn").addEventListener("click", () => {
+      if(current === 0){
+        // block going forward without level
+        if(!level) return;
+        showSlide(1);
+        return;
+      }
+      showSlide(Math.min(slidesTotal, current + 1));
+    });
+
+    window.addEventListener("keydown", (e) => {
+      if(e.key === "ArrowRight"){
+        if(current === 0){ if(level) showSlide(1); return; }
+        showSlide(Math.min(slidesTotal, current + 1));
+      }
+      if(e.key === "ArrowLeft") showSlide(Math.max(0, current - 1));
+      // Quick jump back to level selection
+      if(e.key === "Escape"){
+        level = null;
+        setLevelPill();
+        showSlide(0);
+      }
+    });
+
+    // Init
+    function init(){
+      applyGate();
+      applyQuizHandlers();
+      applyMatching();
+      applyChain();
+      updateTop();
+      setLevelPill();
+    }
+    init();
+  </script>
+</body>
+</html>
