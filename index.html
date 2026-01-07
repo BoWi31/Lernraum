@@ -1,25 +1,18 @@
+
 <!DOCTYPE html>
 <html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>BoWi Lernraum: Geschichte & Politik</title>
-    
-    <!-- Tailwind CSS -->
+    <title>BoWi Lernraum: Geschichte</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-    
-    <!-- React & Babel für In-Browser Transpiling (Maximale Kompatibilität) -->
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
     <style>
-        :root { --app-height: 100svh; }
+        :root {
+            --app-height: 100svh;
+        }
         body {
             font-family: 'Lexend', sans-serif;
             overscroll-behavior: none;
@@ -29,7 +22,10 @@
             overflow: hidden;
             position: fixed;
         }
-        #root { height: 100%; width: 100%; }
+        #root {
+            height: 100%;
+            width: 100%;
+        }
         .snap-container {
             display: flex;
             flex-direction: row;
@@ -52,22 +48,39 @@
             position: relative;
             padding: 2rem 1rem;
         }
-        .snap-container::-webkit-scrollbar { display: none; }
-        .no-select { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
-        @keyframes bounce-x { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(15px); } }
-        .animate-bounce-horizontal { animation: bounce-x 1.5s infinite; }
-        .content-scroll::-webkit-scrollbar { width: 6px; }
-        .content-scroll::-webkit-scrollbar-track { background: #f1f5f9; }
-        .content-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        .snap-container::-webkit-scrollbar {
+            display: none;
+        }
+        .no-select {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        @keyframes bounce-x {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(15px); }
+        }
+        .animate-bounce-horizontal {
+            animation: bounce-x 1.5s infinite;
+        }
+        /* Custom Scrollbar for internal overflow if needed */
+        .content-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+        .content-scroll::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .content-scroll::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
     </style>
 <script type="importmap">
 {
   "imports": {
-    "react": "https://esm.sh/react@^19.2.3",
     "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
     "react/": "https://esm.sh/react@^19.2.3/",
-    "vite": "https://esm.sh/vite@^7.3.0",
-    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2"
+    "react": "https://esm.sh/react@^19.2.3"
   }
 }
 </script>
@@ -75,226 +88,6 @@
 </head>
 <body class="text-slate-800">
     <div id="root"></div>
-
-    <script type="text/babel">
-        const { useState, useMemo, useEffect } = React;
-
-        // --- CONSTANTS & TYPES (Simplified for Single File) ---
-        const GLOSSARY = {
-            "Absolutismus": "Die Zeit, in der ein König ganz allein über alles bestimmt hat (Alleinherrschaft).",
-            "Republik": "Ein Land, in dem das Volk oder gewählte Politiker regieren - es gibt keinen König mehr.",
-            "Wohlfahrtsausschuss": "Eine Gruppe von Revolutionsführern, die im Notfall alle Macht übernahm.",
-            "Guillotine": "Eine Hinrichtungsmaschine mit einem schweren Fallbeil. Sie galt als 'humane' Tötung.",
-            "Terror": "Systematische Gewalt gegen politische Gegner, um Angst zu verbreiten.",
-            "Code Civil": "Ein modernes Gesetzbuch von Napoleon, das Freiheit und Gleichheit festschrieb.",
-            "Demokratie": "Eine Regierungsform, bei der die Macht vom Volk ausgeht.",
-            "Grundgesetz": "Das wichtigste Gesetzbuch in Deutschland. Es enthält unsere Grundrechte.",
-            "Gewaltenteilung": "Die Aufteilung der Macht im Staat auf drei Bereiche.",
-            "Menschenwürde": "Die Vorstellung, dass jeder Mensch wertvoll ist und mit Respekt behandelt werden muss."
-        };
-
-        const SUBJECTS = [
-            {
-                id: 'geschichte', title: 'Geschichte', icon: '🏛️', color: '#3b82f6',
-                grades: [{ id: '7', topics: [
-                    {
-                        id: 'fr-rev', title: 'Französische Revolution',
-                        lessons: [{
-                            id: 'terror', title: 'Der Terror 1793', description: 'Wiederholung & Schreckensherrschaft.', emoji: '⚔️',
-                            levels: [
-                                { 
-                                    id: 't1', name: 'Leicht', icon: '🟩', color: '#22c55e', 
-                                    steps: [
-                                        { id: 1, title: "Wiederholung: Der König", emoji: "👑", content: ["Vor der Revolution gab es den Absolutismus.", "Der König entschied alles allein. Das Volk hatte keine Rechte."], quiz: { type: 'multiple-choice', question: "Wer bestimmte im Absolutismus?", options: [{ text: "Der König allein", isCorrect: true }, { text: "Das Volk", isCorrect: false }] } },
-                                        { id: 2, title: "Der Terror beginnt", emoji: "⚔️", content: ["Ein Mann namens Robespierre übernimmt die Macht.", "Er nutzt die Guillotine, um Gegner zu töten."], quiz: { type: 'multiple-choice', question: "Wer war der Anführer des Terrors?", options: [{ text: "Robespierre", isCorrect: true }, { text: "Napoleon", isCorrect: false }] } }
-                                    ],
-                                    tasks: [{ id: 't1', type: 'pflicht', label: 'Aufgabe', task: 'Zeichne eine Guillotine.' }]
-                                }
-                            ]
-                        }]
-                    }
-                ]}]
-            }
-        ];
-
-        // --- COMPONENTS ---
-
-        const QuizResult = ({ score, onContinue }) => {
-            const feedback = score >= 90 
-                ? { emoji: "🚀", title: "Überragend!", text: "Du bist ein echter Profi!", color: "text-green-600" }
-                : score >= 50 
-                ? { emoji: "👍", title: "Gut gemacht!", text: "Du bist auf dem richtigen Weg.", color: "text-blue-600" }
-                : { emoji: "📚", title: "Bleib dran!", text: "Schau dir die Inhalte nochmal an.", color: "text-slate-600" };
-
-            return (
-                <div className="bg-white rounded-[32px] p-8 shadow-xl border-4 border-slate-100 flex flex-col items-center text-center gap-6 max-w-md mx-auto">
-                    <div className="text-5xl font-black text-slate-800 bg-slate-50 w-24 h-24 rounded-full flex items-center justify-center border-4 border-blue-500">
-                        {score}%
-                    </div>
-                    <div>
-                        <span className="text-5xl block mb-2">{feedback.emoji}</span>
-                        <h4 className={`text-2xl font-black uppercase tracking-tight ${feedback.color}`}>{feedback.title}</h4>
-                        <p className="text-slate-500 font-bold mt-2 leading-tight">{feedback.text}</p>
-                    </div>
-                    <button onClick={onContinue} className="w-full bg-blue-600 text-white font-black py-4 rounded-2xl text-xl shadow-lg hover:bg-blue-700 transition-all">
-                        Weiter
-                    </button>
-                </div>
-            );
-        };
-
-        const MultipleChoiceQuiz = ({ options, onResult, state }) => (
-            <div className="grid gap-2 w-full max-w-2xl mx-auto">
-                {options.map((o, oi) => (
-                    <button 
-                        key={oi} 
-                        disabled={state?.ok === true} 
-                        onClick={() => onResult(o.isCorrect, oi)} 
-                        className={`p-4 rounded-2xl text-lg font-bold flex justify-between items-center transition-all border-4 ${state?.sel === oi ? (o.isCorrect ? 'bg-green-100 border-green-500' : 'bg-red-100 border-red-500') : 'bg-white border-slate-100 shadow-sm hover:border-blue-200'}`}
-                    >
-                        <span className="text-left">{o.text}</span>
-                        {state?.sel === oi && <span>{o.isCorrect ? '✅' : '❌'}</span>}
-                    </button>
-                ))}
-            </div>
-        );
-
-        const GlossaryTerm = ({ term }) => {
-            const [show, setShow] = useState(false);
-            const def = GLOSSARY[term];
-            if (!def) return <span>{term}</span>;
-            return (
-                <span className="relative inline-block" onMouseEnter={() => setShow(true)} onMouseLeave={() => setShow(false)}>
-                    <span className="border-b-2 border-dotted border-blue-400 font-bold bg-blue-50 px-0.5 rounded cursor-help">{term}</span>
-                    {show && (
-                        <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 bg-white border-2 border-blue-600 p-3 rounded-xl shadow-2xl z-50 text-sm font-normal text-slate-800">
-                            {def}
-                        </span>
-                    )}
-                </span>
-            );
-        };
-
-        const ContentRenderer = ({ text }) => {
-            const terms = Object.keys(GLOSSARY).sort((a, b) => b.length - a.length);
-            const regex = new RegExp(`(${terms.join('|')})`, 'gi');
-            const parts = text.split(regex);
-            return <>{parts.map((p, i) => {
-                const t = terms.find(x => x.toLowerCase() === p.toLowerCase());
-                return t ? <GlossaryTerm key={i} term={t} /> : p;
-            })}</>;
-        };
-
-        // --- APP MAIN ---
-
-        const App = () => {
-            const [view, setView] = useState('subject');
-            const [path, setPath] = useState({});
-            const [unlockedSlide, setUnlockedSlide] = useState(0);
-            const [quizState, setQuizState] = useState({});
-
-            const currentLevel = path.lesson?.levels[path.levelIdx || 0];
-            const steps = currentLevel?.steps || [];
-
-            const scroll = (id) => {
-                const el = document.getElementById(`slide-${id}`);
-                el?.scrollIntoView({ behavior: 'smooth', inline: 'start' });
-            };
-
-            const unlockNext = (quizIdx) => {
-                const nextSlide = quizIdx + 1;
-                if (unlockedSlide < nextSlide) setUnlockedSlide(nextSlide);
-                setTimeout(() => scroll(nextSlide), 100);
-            };
-
-            if (view === 'learning' && currentLevel) {
-                return (
-                    <div className="h-full flex flex-col bg-slate-100 fixed inset-0 overflow-hidden">
-                        <header className="bg-white border-b border-slate-200 p-4 flex justify-between items-center shadow-sm">
-                            <button onClick={() => setView('level')} className="font-bold text-blue-600 flex items-center gap-2">
-                                ⬅ Zurück
-                            </button>
-                            <div className="h-2 w-32 bg-slate-100 rounded-full overflow-hidden border border-slate-200">
-                                <div className="h-full bg-blue-500 transition-all" style={{ width: `${(unlockedSlide / (steps.length * 2)) * 100}%` }}></div>
-                            </div>
-                            <button onClick={() => { setView('subject'); setPath({}); }} className="text-xl">🏠</button>
-                        </header>
-
-                        <div className="snap-container flex-1">
-                            {steps.map((step, idx) => {
-                                const contentIdx = idx * 2;
-                                const quizIdx = (idx * 2) + 1;
-                                const isUnlocked = contentIdx <= unlockedSlide;
-                                const curQuiz = quizState[idx];
-
-                                return (
-                                    <React.Fragment key={step.id}>
-                                        <section id={`slide-${contentIdx}`} className={`snap-section ${isUnlocked ? 'opacity-100' : 'opacity-0'}`}>
-                                            <div className="bg-white rounded-[40px] p-8 shadow-2xl max-w-4xl w-[90%] h-[80%] flex flex-col">
-                                                <h2 className="text-3xl font-black text-blue-900 mb-6">{step.emoji} {step.title}</h2>
-                                                <div className="flex-1 overflow-y-auto pr-4 space-y-4 text-xl">
-                                                    {step.content.map((t, ci) => <p key={ci}><ContentRenderer text={t} /></p>)}
-                                                </div>
-                                                <button onClick={() => { setUnlockedSlide(quizIdx); scroll(quizIdx); }} className="mt-6 bg-blue-600 text-white font-bold py-4 rounded-2xl text-xl">
-                                                    Check machen →
-                                                </button>
-                                            </div>
-                                        </section>
-
-                                        <section id={`slide-${quizIdx}`} className={`snap-section ${quizIdx <= unlockedSlide ? 'opacity-100' : 'opacity-0'}`}>
-                                            <div className="bg-white rounded-[40px] p-8 shadow-2xl max-w-4xl w-[90%] h-[80%] flex flex-col justify-center">
-                                                {!curQuiz?.ok ? (
-                                                    <>
-                                                        <h3 className="text-2xl font-bold text-center mb-8">{step.quiz.question}</h3>
-                                                        <MultipleChoiceQuiz options={step.quiz.options} onResult={(ok, s) => setQuizState(p => ({...p, [idx]: {sel: s, ok}}))} state={curQuiz} />
-                                                    </>
-                                                ) : (
-                                                    <QuizResult score={100} onContinue={() => unlockNext(quizIdx)} />
-                                                )}
-                                            </div>
-                                        </section>
-                                    </React.Fragment>
-                                );
-                            })}
-                        </div>
-                    </div>
-                );
-            }
-
-            return (
-                <div className="p-8 max-w-2xl mx-auto space-y-8 h-full overflow-y-auto">
-                    <div className="text-center">
-                        <h1 className="text-4xl font-black text-slate-800 uppercase">BoWi Lernraum</h1>
-                        <p className="text-slate-400 font-bold mt-2">Wähle ein Fach</p>
-                    </div>
-                    {view === 'subject' && (
-                        <div className="grid gap-4">
-                            {SUBJECTS.map(s => (
-                                <button key={s.id} onClick={() => { setPath({subject: s}); setView('level'); }} className="bg-white p-6 rounded-3xl shadow-sm border-2 border-slate-100 flex items-center gap-4 hover:border-blue-400 transition-all">
-                                    <span className="text-4xl">{s.icon}</span>
-                                    <span className="text-2xl font-bold">{s.title}</span>
-                                </button>
-                            ))}
-                        </div>
-                    )}
-                    {view === 'level' && path.subject && (
-                        <div className="space-y-4">
-                            <h2 className="text-2xl font-black">Level wählen</h2>
-                            {path.subject.grades[0].topics[0].lessons[0].levels.map((lvl, i) => (
-                                <button key={lvl.id} onClick={() => { setPath({...path, lesson: path.subject.grades[0].topics[0].lessons[0], levelIdx: i}); setView('learning'); }} className="w-full bg-white p-6 rounded-3xl border-2 border-slate-100 flex items-center justify-between">
-                                    <span className="text-xl font-bold">{lvl.icon} {lvl.name}</span>
-                                    <span>➔</span>
-                                </button>
-                            ))}
-                        </div>
-                    )}
-                </div>
-            );
-        };
-
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
-    </script>
 <script type="module" src="/index.tsx"></script>
 </body>
 </html>

@@ -1,6 +1,7 @@
+
 import React, { useState, useMemo, useEffect } from 'react';
-import { SUBJECTS, GLOSSARY } from './constants.ts';
-import { Subject, Topic, Lesson, LearningStep, NotebookTask, QuizOption, MatchingPair, DragItem, DropZone } from './types.ts';
+import { SUBJECTS, GLOSSARY } from './constants';
+import { Subject, Topic, Lesson, LearningStep, NotebookTask, QuizOption, MatchingPair, DragItem, DropZone } from './types';
 
 // --- VISUAL ELEMENTS ---
 
@@ -60,12 +61,11 @@ const MultipleChoiceQuiz: React.FC<{
 const DragDropQuiz: React.FC<{
   dragItems: DragItem[];
   dropZones: DropZone[];
-  onComplete: (score: number) => void;
+  onComplete: () => void;
 }> = ({ dragItems, dropZones, onComplete }) => {
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
   const [placements, setPlacements] = useState<Record<string, string>>({});
   const [wrongEffect, setWrongEffect] = useState<string | null>(null);
-  const [mistakes, setMistakes] = useState(0);
 
   const handleZoneClick = (zoneId: string) => {
     if (!selectedItem || placements[zoneId]) return;
@@ -74,13 +74,9 @@ const DragDropQuiz: React.FC<{
       const newPlacements = { ...placements, [zoneId]: selectedItem };
       setPlacements(newPlacements);
       setSelectedItem(null);
-      if (Object.keys(newPlacements).length === dropZones.length) {
-        const score = Math.max(0, 100 - (mistakes * 10));
-        onComplete(score);
-      }
+      if (Object.keys(newPlacements).length === dropZones.length) onComplete();
     } else {
       setWrongEffect(zoneId);
-      setMistakes(m => m + 1);
       setTimeout(() => setWrongEffect(null), 500);
     }
   };
@@ -124,12 +120,11 @@ const DragDropQuiz: React.FC<{
 
 const MatchingQuiz: React.FC<{
   pairs: MatchingPair[];
-  onComplete: (score: number) => void;
+  onComplete: () => void;
 }> = ({ pairs, onComplete }) => {
   const [selectedLeft, setSelectedLeft] = useState<string | null>(null);
   const [matches, setMatches] = useState<Record<string, string>>({});
   const [wrong, setWrong] = useState<string | null>(null);
-  const [mistakes, setMistakes] = useState(0);
 
   const leftItems = useMemo(() => [...pairs].sort(() => 0.5 - Math.random()), [pairs]);
   const rightItems = useMemo(() => [...pairs].sort(() => 0.5 - Math.random()), [pairs]);
@@ -146,13 +141,9 @@ const MatchingQuiz: React.FC<{
       const newMatches = { ...matches, [id]: id };
       setMatches(newMatches);
       setSelectedLeft(null);
-      if (Object.keys(newMatches).length === pairs.length) {
-        const score = Math.max(0, 100 - (mistakes * 15));
-        onComplete(score);
-      }
+      if (Object.keys(newMatches).length === pairs.length) onComplete();
     } else {
       setWrong(id);
-      setMistakes(m => m + 1);
       setTimeout(() => setWrong(null), 500);
     }
   };
@@ -190,11 +181,10 @@ const MatchingQuiz: React.FC<{
 
 const OrderingQuiz: React.FC<{
   items: string[];
-  onComplete: (score: number) => void;
+  onComplete: () => void;
 }> = ({ items, onComplete }) => {
   const [currentOrder, setCurrentOrder] = useState(() => [...items].sort(() => 0.5 - Math.random()));
   const [isCorrect, setIsCorrect] = useState(false);
-  const [moves, setMoves] = useState(0);
 
   const move = (idx: number, dir: number) => {
     if (isCorrect) return;
@@ -203,12 +193,9 @@ const OrderingQuiz: React.FC<{
     if (target < 0 || target >= items.length) return;
     [newOrder[idx], newOrder[target]] = [newOrder[target], newOrder[idx]];
     setCurrentOrder(newOrder);
-    setMoves(m => m + 1);
     if (JSON.stringify(newOrder) === JSON.stringify(items)) {
       setIsCorrect(true);
-      const minMoves = items.length;
-      const score = Math.max(50, 100 - (Math.max(0, moves - minMoves) * 5));
-      onComplete(score);
+      onComplete();
     }
   };
 
@@ -218,56 +205,12 @@ const OrderingQuiz: React.FC<{
         <div key={text} className={`flex items-center gap-3 p-3 rounded-2xl border-4 transition-all ${isCorrect ? 'bg-green-100 border-green-500' : 'bg-white border-slate-100 shadow-sm'}`}>
           <div className="flex flex-col gap-1 shrink-0">
             <button onClick={() => move(i, -1)} disabled={i === 0 || isCorrect} className="p-1 hover:bg-slate-100 rounded text-slate-400 disabled:opacity-10 text-2xl">▲</button>
-            <button onClick={() => move(i, 1)} disabled={i === currentOrder.length - 1 || isCorrect} className="p-1 hover:bg-slate-100 rounded text-slate-400 disabled:opacity-10 text-2xl">▼</button>
+            <button onClick={() => move(i, 1)} disabled={i === items.length - 1 || isCorrect} className="p-1 hover:bg-slate-100 rounded text-slate-400 disabled:opacity-10 text-2xl">▼</button>
           </div>
           <span className="text-lg font-bold text-slate-700 flex-1 leading-tight">{text}</span>
           {isCorrect && <span className="text-2xl">✅</span>}
         </div>
       ))}
-    </div>
-  );
-};
-
-// --- FEEDBACK & RESULTS ---
-
-const QuizResult: React.FC<{ score: number; onContinue: () => void }> = ({ score, onContinue }) => {
-  const getFeedback = () => {
-    if (score >= 90) return { emoji: "🚀", title: "Überragend!", text: "Du hast fast alles richtig gemacht. Du bist ein echter Profi!", color: "text-green-600" };
-    if (score >= 70) return { emoji: "🌟", title: "Super Leistung!", text: "Das war sehr gut! Du hast die wichtigsten Punkte verstanden.", color: "text-blue-600" };
-    if (score >= 50) return { emoji: "👍", title: "Gut gemacht!", text: "Du bist auf dem richtigen Weg. Ein bisschen mehr Übung und es wird perfekt.", color: "text-yellow-600" };
-    return { emoji: "📚", title: "Bleib dran!", text: "Aller Anfang ist schwer. Schau dir die Inhalte nochmal in Ruhe an.", color: "text-slate-600" };
-  };
-
-  const feedback = getFeedback();
-
-  return (
-    <div className="animate-in fade-in zoom-in duration-500 bg-white rounded-[32px] p-8 shadow-xl border-4 border-slate-100 flex flex-col items-center text-center gap-6 max-w-md mx-auto">
-      <div className="relative w-32 h-32 flex items-center justify-center">
-         <svg className="absolute inset-0 w-full h-full -rotate-90">
-            <circle cx="64" cy="64" r="58" fill="none" stroke="#f1f5f9" strokeWidth="12" />
-            <circle 
-              cx="64" cy="64" r="58" fill="none" 
-              stroke={score >= 70 ? "#22c55e" : score >= 50 ? "#eab308" : "#3b82f6"} 
-              strokeWidth="12" 
-              strokeDasharray="364.4" 
-              strokeDashoffset={364.4 - (364.4 * score) / 100}
-              strokeLinecap="round"
-              className="transition-all duration-1000 ease-out"
-            />
-         </svg>
-         <span className="text-3xl font-black text-slate-800">{score}%</span>
-      </div>
-      <div>
-        <span className="text-5xl block mb-2">{feedback.emoji}</span>
-        <h4 className={`text-2xl font-black uppercase tracking-tight ${feedback.color}`}>{feedback.title}</h4>
-        <p className="text-slate-500 font-bold mt-2 leading-tight">{feedback.text}</p>
-      </div>
-      <button 
-        onClick={onContinue} 
-        className="w-full bg-blue-600 text-white font-black py-4 rounded-2xl text-xl shadow-lg hover:bg-blue-700 transition-all flex items-center justify-center gap-3"
-      >
-        Weiter <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}><path d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
-      </button>
     </div>
   );
 };
@@ -307,6 +250,7 @@ const GlossaryTerm: React.FC<{ term: string }> = ({ term }) => {
   const def = GLOSSARY[term];
   if (!def) return <span>{term}</span>;
 
+  // Globaler Listener zum Schließen beim Klick außerhalb
   useEffect(() => {
     if (!show) return;
     const handleGlobalClick = () => setShow(false);
@@ -349,7 +293,7 @@ const App: React.FC = () => {
   const [view, setView] = useState<'subject' | 'grade' | 'topic' | 'lesson' | 'level' | 'learning'>('subject');
   const [path, setPath] = useState<{ subject?: Subject; grade?: string; topic?: Topic; lesson?: Lesson; levelIdx?: number }>({});
   const [unlockedSlide, setUnlockedSlide] = useState(0);
-  const [quizState, setQuizState] = useState<Record<number, { sel: number | null, ok: boolean | null, score?: number }>>({});
+  const [quizState, setQuizState] = useState<Record<number, { sel: number | null, ok: boolean | null }>>({});
   const [checkedTasks, setCheckedTasks] = useState<Record<string, boolean>>({});
 
   const goHome = () => { setView('subject'); setPath({}); setUnlockedSlide(0); setQuizState({}); setCheckedTasks({}); };
@@ -364,15 +308,13 @@ const App: React.FC = () => {
     el?.scrollIntoView({ behavior: 'smooth', inline: 'start' });
   };
 
-  const handleQuizResult = (stepIdx: number, ok: boolean, sel: number | null, score?: number) => {
+  const handleQuizResult = (stepIdx: number, ok: boolean, sel: number | null) => {
     if (quizState[stepIdx]?.ok) return;
-    setQuizState(prev => ({ ...prev, [stepIdx]: { sel, ok, score: score ?? (ok ? 100 : 0) } }));
-  };
-
-  const unlockNext = (quizIdx: number) => {
-    const nextSlide = quizIdx + 1;
-    if (unlockedSlide < nextSlide) setUnlockedSlide(nextSlide);
-    setTimeout(() => scroll(nextSlide), 100);
+    setQuizState(prev => ({ ...prev, [stepIdx]: { sel, ok } }));
+    if (ok) {
+      const nextSlide = (stepIdx * 2) + 2;
+      if (unlockedSlide < nextSlide) setUnlockedSlide(nextSlide);
+    }
   };
 
   useEffect(() => {
@@ -411,8 +353,6 @@ const App: React.FC = () => {
             const contentIdx = idx * 2;
             const quizIdx = (idx * 2) + 1;
             const isUnlocked = contentIdx <= unlockedSlide;
-            const currentQuizState = quizState[idx];
-
             return (
               <React.Fragment key={step.id}>
                 <section id={`slide-${contentIdx}`} className={`snap-section transition-all duration-700 ${isUnlocked ? 'opacity-100' : 'opacity-0 scale-95 pointer-events-none'}`}>
@@ -446,25 +386,25 @@ const App: React.FC = () => {
 
                 {step.quiz && (
                   <section id={`slide-${quizIdx}`} className={`snap-section transition-all duration-700 ${quizIdx <= unlockedSlide ? 'opacity-100' : 'opacity-0 scale-95 pointer-events-none'}`}>
-                    <div className={`max-w-[95%] lg:max-w-4xl w-full h-[88%] rounded-[40px] shadow-2xl border-4 p-6 md:p-10 flex flex-col overflow-hidden transition-colors duration-500 ${currentQuizState?.ok ? 'bg-white border-blue-200' : 'bg-slate-50 border-slate-200'}`}>
-                      {!currentQuizState?.ok ? (
-                        <>
-                          <div className="text-center mb-6 shrink-0">
-                            <span className="text-4xl md:text-6xl mb-1 block">🤔</span>
-                            <h3 className="text-3xl font-black text-slate-800 mb-0.5 uppercase tracking-tight leading-none">Mini-Check</h3>
-                            <p className="text-xl md:text-2xl text-slate-500 font-bold leading-tight mt-2">{step.quiz.question}</p>
-                          </div>
-                          
-                          <div className="flex-1 overflow-y-auto content-scroll px-2 py-2 no-scrollbar">
-                            {step.quiz.type === 'multiple-choice' && <MultipleChoiceQuiz options={step.quiz.options || []} onResult={(ok, s) => handleQuizResult(idx, ok, s)} state={currentQuizState} />}
-                            {step.quiz.type === 'matching' && <MatchingQuiz pairs={step.quiz.pairs || []} onComplete={(s) => handleQuizResult(idx, true, 0, s)} />}
-                            {step.quiz.type === 'ordering' && <OrderingQuiz items={step.quiz.order || []} onComplete={(s) => handleQuizResult(idx, true, 0, s)} />}
-                            {step.quiz.type === 'drag-drop' && <DragDropQuiz dragItems={step.quiz.dragItems || []} dropZones={step.quiz.dropZones || []} onComplete={(s) => handleQuizResult(idx, true, 0, s)} />}
-                          </div>
-                        </>
-                      ) : (
-                        <div className="flex-1 flex items-center justify-center">
-                          <QuizResult score={currentQuizState.score || 0} onContinue={() => unlockNext(quizIdx)} />
+                    <div className={`max-w-[95%] lg:max-w-4xl w-full h-[88%] rounded-[40px] shadow-2xl border-4 p-6 md:p-10 flex flex-col overflow-hidden ${quizState[idx]?.ok ? 'bg-green-50 border-green-200' : 'bg-slate-50 border-slate-200'}`}>
+                      <div className="text-center mb-6 shrink-0">
+                        <span className="text-4xl md:text-6xl mb-1 block">🤔</span>
+                        <h3 className="text-3xl font-black text-slate-800 mb-0.5 uppercase tracking-tight leading-none">Mini-Check</h3>
+                        <p className="text-xl md:text-2xl text-slate-500 font-bold leading-tight mt-2">{step.quiz.question}</p>
+                      </div>
+                      
+                      <div className="flex-1 overflow-y-auto content-scroll px-2 py-2 no-scrollbar">
+                        {step.quiz.type === 'multiple-choice' && <MultipleChoiceQuiz options={step.quiz.options || []} onResult={(ok, s) => handleQuizResult(idx, ok, s)} state={quizState[idx]} />}
+                        {step.quiz.type === 'matching' && <MatchingQuiz pairs={step.quiz.pairs || []} onComplete={() => handleQuizResult(idx, true, 0)} />}
+                        {step.quiz.type === 'ordering' && <OrderingQuiz items={step.quiz.order || []} onComplete={() => handleQuizResult(idx, true, 0)} />}
+                        {step.quiz.type === 'drag-drop' && <DragDropQuiz dragItems={step.quiz.dragItems || []} dropZones={step.quiz.dropZones || []} onComplete={() => handleQuizResult(idx, true, 0)} />}
+                      </div>
+
+                      {quizState[idx]?.ok && (
+                        <div className="pt-6 shrink-0">
+                          <button onClick={() => scroll(quizIdx + 1)} className="bg-blue-600 text-white font-black py-5 px-12 rounded-3xl text-2xl flex items-center gap-4 mx-auto shadow-lg hover:scale-105 transition-all">
+                            Sehr gut! Weiter <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={4}><path d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+                          </button>
                         </div>
                       )}
                     </div>
@@ -618,7 +558,7 @@ const App: React.FC = () => {
         </div>
       </main>
       <footer className="py-3 text-center text-[8px] font-black text-slate-400 uppercase tracking-[0.4em] pointer-events-none shrink-0 border-t border-slate-100 bg-white">
-        BoWi Lernraum • Erstellt von Herr Woitun • Keine Datenspeicherung • <a href="https://ai.google.dev/gemini-api/docs/billing" className="underline pointer-events-auto">Billing Info</a>
+        BoWi Lernraum • Erstellt von Herr Woitun • Keine Datenspeicherung
       </footer>
     </div>
   );

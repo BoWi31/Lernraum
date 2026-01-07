@@ -1,5 +1,5 @@
 
-import { Subject, LearningStep, NotebookTask } from './types.ts';
+import { Subject, LearningStep, NotebookTask } from './types';
 
 export const GLOSSARY: Record<string, string> = {
   "Absolutismus": "Die Zeit, in der ein König ganz allein über alles bestimmt hat (Alleinherrschaft).",
@@ -12,7 +12,6 @@ export const GLOSSARY: Record<string, string> = {
   "Denunziation": "Das Anzeigen oder Verraten von Mitmenschen aus niederen Motiven.",
   "Tugend": "Eine moralisch gute Eigenschaft. Robespierre wollte ein Volk voller 'tugendhafter' Bürger.",
   "Privilegien": "Sonderrechte, die früher nur der Adel und die Kirche hatten (z.B. keine Steuern).",
-  // Politik Glossar
   "Demokratie": "Eine Regierungsform, bei der die Macht vom Volk ausgeht (Wahlen, Mitbestimmung).",
   "Grundgesetz": "Das wichtigste Gesetzbuch in Deutschland. Es enthält unsere Grundrechte.",
   "Gewaltenteilung": "Die Aufteilung der Macht im Staat auf drei Bereiche, damit niemand zu viel Macht hat.",
@@ -30,8 +29,6 @@ const FEEDBACK_TASK: NotebookTask = {
   label: 'Feedback', 
   task: 'Fülle den Feedbackbogen zum geschafften Lernraum aus.' 
 };
-
-// --- HEFTAUFGABEN DIFFERENZIERT ---
 
 const CREATE_TASKS_GESCHICHTE = (level: string): NotebookTask[] => {
   let tasks: NotebookTask[] = [];
@@ -81,8 +78,6 @@ const CREATE_TASKS_POLITIK = (level: string): NotebookTask[] => {
   return [...tasks, FEEDBACK_TASK];
 };
 
-// --- CONTENT STEPS ---
-
 const WIEDERHOLUNG_STEPS = (level: 'L' | 'M' | 'S'): LearningStep[] => [
   {
     id: 1, title: "Wiederholung: Der König", emoji: "👑",
@@ -90,16 +85,12 @@ const WIEDERHOLUNG_STEPS = (level: 'L' | 'M' | 'S'): LearningStep[] => [
       ? ["Vor der Revolution gab es den Absolutismus.", "Der König entschied alles allein. Das Volk hatte keine Rechte."]
       : level === 'M'
       ? ["Erinnerst du dich? Im Absolutismus herrschte Ludwig XVI. allein über Frankreich.", "Er sah sich als Stellvertreter Gottes auf Erden."]
-      : ["Das Ancien Régime basierte auf der unumschränkten Macht des Monarchen.", "Diese Alleinherrschaft nennen wir Absolutismus."],
-    quiz: { 
-      type: 'multiple-choice', 
-      question: "Wer bestimmte im Absolutismus über die Gesetze?", 
-      options: [
-        { text: "Der König allein", isCorrect: true }, 
-        { text: "Ein gewähltes Parlament", isCorrect: false },
-        { text: "Die Bauern durch Wahlen", isCorrect: false }
-      ] 
-    }
+      : ["Das Ancien Régime basierte auf der unumschränkten Macht des Monarchen.", "Diese Alleinherrschaft nennen wir Absolutismus. Sie endete mit der Revolution."],
+    quiz: level === 'S' ? {
+      type: 'ordering',
+      question: "Bringe die Machtverhältnisse in die richtige historische Reihenfolge (von alt nach neu):",
+      order: ["Absolutismus (König herrscht allein)", "Konstitutionelle Monarchie (König + Verfassung)", "Republik (Volk herrscht ohne König)"]
+    } : { type: 'multiple-choice', question: "Wie nannte man die Alleinherrschaft?", options: [{ text: "Absolutismus", isCorrect: true }, { text: "Demokratie", isCorrect: false }] }
   },
   {
     id: 2, title: "Wiederholung: Stände", emoji: "⚖️",
@@ -110,14 +101,11 @@ const WIEDERHOLUNG_STEPS = (level: 'L' | 'M' | 'S'): LearningStep[] => [
       : ["Die Gesellschaft war streng hierarchisch gegliedert.", "Der 3. Stand trug die gesamte Steuerlast, besaß aber keinerlei politische Mitbestimmung."],
     quiz: { 
       type: 'drag-drop', 
-      question: "Ordne die Lasten und Rechte zu:", 
-      dragItems: [
-        {id:'d1', text:'Steuern & Hunger'}, 
-        {id:'d2', text:'Schlösser & keine Steuern'}
-      ], 
+      question: "Ordne die Merkmale der Stände korrekt zu:", 
+      dragItems: [{id:'d1', text:'Steuerfreiheit'}, {id:'d2', text:'Hunger & harte Arbeit'}, {id:'d3', text:'Politisches Sagen'}, {id:'d4', text:'Keine Mitbestimmung'}], 
       dropZones: [
-        {id:'z1', label:'Eigenschaften 1. & 2. Stand', correctItemId:'d2'}, 
-        {id:'z2', label:'Eigenschaften 3. Stand', correctItemId:'d1'}
+        {id:'z1', label:'1. & 2. Stand (Klerus/Adel)', correctItemId:'d1'}, 
+        {id:'z2', label:'3. Stand (Bauern/Bürger)', correctItemId:'d2'}
       ] 
     }
   }
@@ -130,16 +118,15 @@ const TERROR_CONTENT = (level: 'L' | 'M' | 'S'): LearningStep[] => [
       ? ["Eigentlich wollten alle Freiheit. Doch 1793 herrscht Chaos.", "Es gibt Krieg gegen das Ausland und Hunger in Paris."]
       : level === 'M'
       ? ["Nach dem Sieg über den König war Frankreich nicht friedlich.", "Feinde von außen und Hungersnöte im Inneren bedrohten die Revolution."]
-      : ["Trotz der Erklärung der Menschenrechte war die Republik instabil.", "Innere Aufstände und äußere Kriege führten zu einer radikalen Stimmung."],
-    quiz: { 
-      type: 'multiple-choice', 
-      question: "Warum radikalisierte sich die Revolution 1793?", 
-      options: [
-        { text: "Wegen Bedrohung durch Krieg und Hunger", isCorrect: true }, 
-        { text: "Weil der König freiwillig abdankte", isCorrect: false },
-        { text: "Weil das Volk zu viel Geld hatte", isCorrect: false }
-      ] 
-    }
+      : ["Trotz der Erklärung der Menschenrechte war die Republik instabil.", "Innere Aufstände und äußere Kriege radikalisierten die Jakobiner."],
+    quiz: level === 'S' ? {
+      type: 'matching',
+      question: "Welche Bedrohung führte zu welcher Reaktion?",
+      pairs: [
+        {id:'p1', left:'Innere Aufstände', right:'Gesetz der Verdächtigen'},
+        {id:'p2', left:'Äußerer Krieg', right:'Massenaushebung (Militär)'}
+      ]
+    } : { type: 'multiple-choice', question: "Was bedrohte die Revolution 1793?", options: [{ text: "Krieg und Hunger", isCorrect: true }, { text: "Zu viel Freizeit", isCorrect: false }] }
   },
   {
     id: 5, title: "Der Terror beginnt", emoji: "⚔️", imageType: 'guillotine',
@@ -147,16 +134,16 @@ const TERROR_CONTENT = (level: 'L' | 'M' | 'S'): LearningStep[] => [
       ? ["Ein Mann namens Robespierre übernimmt die Macht.", "Er nutzt die Guillotine, um alle Gegner zu töten."]
       : level === 'M'
       ? ["Maximilian Robespierre wollte die Revolution mit Gewalt retten.", "Jeder, der verdächtig war, landete unter der Guillotine."]
-      : ["Der Wohlfahrtsausschuss unter Robespierre errichtete ein Terror-Regime.", "Terror wurde als Mittel zur Erhaltung der 'Tugend' gerechtfertigt."],
-    quiz: { 
-      type: 'matching', 
-      question: "Verbinde die Begriffe des Terrors:", 
-      pairs: [
-        {id:'p1', left:'Robespierre', right:'Anführer "Tugend durch Terror"'}, 
-        {id:'p2', left:'Guillotine', right:'Symbol der Schreckensherrschaft'},
-        {id:'p3', left:'Denunziation', right:'Anzeigen von Nachbarn'}
-      ] 
-    }
+      : ["Der Wohlfahrtsausschuss unter Robespierre errichtete ein Terror-Regime.", "Terror wurde als notwendiges Mittel zur Erhaltung der 'Tugend' gerechtfertigt."],
+    quiz: level === 'S' ? {
+      type: 'drag-drop',
+      question: "Robespierres Logik: Was gehört zusammen?",
+      dragItems: [{id:'r1', text:'Tugend'}, {id:'r2', text:'Terror'}],
+      dropZones: [
+        {id:'rz1', label:'Das Ziel der Republik', correctItemId:'r1'},
+        {id:'rz2', label:'Das Mittel zum Ziel', correctItemId:'r2'}
+      ]
+    } : { type: 'matching', question: "Was passt zusammen?", pairs: [{id:'p1', left:'Robespierre', right:'Anführer des Terrors'}, {id:'p2', left:'Guillotine', right:'Hinrichtungswerkzeug'}] }
   }
 ];
 
@@ -167,40 +154,12 @@ const POLITIK_STEPS = (level: 'L' | 'M' | 'S'): LearningStep[] => [
       ? ["Politik bedeutet alles, was mit Regeln und Entscheidungen zu tun hat.", "Wir überlegen: Wie wollen wir zusammenleben?"]
       : level === 'M'
       ? ["Alles, was mit Regeln, Entscheidungen und dem Zusammenleben der Menschen zu tun hat, nennen wir Politik.", "Politik klärt: Was ist erlaubt? Wer entscheidet? Wie lösen wir Streit?"]
-      : ["Politik ist das Aushandeln von Regeln für das Gemeinwesen.", "Zentrale Aspekte sind verbindliche Entscheidungen, klare Regeln und das Lösen von Konflikten."],
-    quiz: { 
-      type: 'multiple-choice', 
-      question: "Welche Aussage beschreibt Politik am besten?", 
-      options: [
-        { text: "Das Treffen von Regeln für das Zusammenleben aller", isCorrect: true }, 
-        { text: "Dass jeder macht, was er gerade will", isCorrect: false },
-        { text: "Nur das, was im Fernsehen läuft", isCorrect: false }
-      ] 
-    }
-  },
-  {
-    id: 102, title: "Politik im Alltag", emoji: "🏫",
-    content: level === 'L'
-      ? ["Politik ist überall: In der Schule gibt es Schulregeln.", "In der Stadt gibt es Buspläne und Spielplätze. Auch zu Hause gibt es Regeln (z.B. Mülltrennung)."]
-      : level === 'M'
-      ? ["Politik beeinflusst viele Bereiche unseres Lebens.", "In der Schule (Klassensprecher), in der Stadt (Verkehr), zu Hause (Preise, Sicherheit) und im Internet (Datenschutz)."]
-      : ["Politische Entscheidungen setzen den Rahmen für unseren Alltag.", "Ob Bildungspolitik, Verkehrsplanung oder Verbraucherschutz – Politik ist omnipräsent."],
-    quiz: { 
-      type: 'drag-drop', 
-      question: "Wo finden wir diese politischen Regeln?", 
-      dragItems: [
-        {id:'pd1', text:'Klassensprecher-Wahl'}, 
-        {id:'pd2', text:'Spielplatz-Bau'},
-        {id:'pd3', text:'Mülltrennung'},
-        {id:'pd4', text:'Datenschutz-App'}
-      ], 
-      dropZones: [
-        {id:'pz1', label:'In der Schule', correctItemId:'pd1'}, 
-        {id:'pz2', label:'In der Stadt', correctItemId:'pd2'},
-        {id:'pz3', label:'Zu Hause', correctItemId:'pd3'},
-        {id:'pz4', label:'Im Internet', correctItemId:'pd4'}
-      ] 
-    }
+      : ["Politik ist das Aushandeln von Regeln für das Gemeinwesen.", "Zentrale Aspekte sind verbindliche Entscheidungen und das Lösen gesellschaftlicher Konflikte."],
+    quiz: level === 'S' ? {
+      type: 'ordering',
+      question: "Ordne den politischen Prozess: Wie entsteht eine Lösung?",
+      order: ["Problem wird erkannt", "Meinungen werden ausgetauscht", "Entscheidung (Gesetz) wird getroffen"]
+    } : { type: 'multiple-choice', question: "Worum geht es in der Politik?", options: [{ text: "Um Regeln und Zusammenleben", isCorrect: true }, { text: "Nur um Hausaufgaben", isCorrect: false }] }
   },
   {
     id: 103, title: "Was ist Demokratie?", emoji: "🗳️",
@@ -208,32 +167,32 @@ const POLITIK_STEPS = (level: 'L' | 'M' | 'S'): LearningStep[] => [
       ? ["In einer Demokratie darf jeder seine Meinung sagen.", "Das Volk bestimmt mit. Es gibt freie Wahlen."]
       : level === 'M'
       ? ["Demokratie heißt: Das Volk herrscht. Merkmale sind: mehrere Parteien, Minderheitenschutz und faire Entscheidungen.", "Niemand darf benachteiligt werden."]
-      : ["Demokratie basiert auf Volkssouveränität und Pluralismus.", "Kernmerkmale sind freie Wahlen, Meinungsfreiheit und der Schutz von Minderheiten."],
-    quiz: { 
-      type: 'matching', 
-      question: "Was gehört untrennbar zur Demokratie?", 
+      : ["Demokratie basiert auf Volkssouveränität und Pluralismus.", "Kernmerkmale sind freie Wahlen, Meinungsfreiheit und der Schutz von Minderheiten vor der Mehrheit."],
+    quiz: level === 'S' ? {
+      type: 'matching',
+      question: "Ordne die demokratischen Prinzipien zu:",
       pairs: [
-        {id:'pp1', left:'Wahlen', right:'Volk bestimmt Vertreter'}, 
-        {id:'pp2', left:'Meinungsfreiheit', right:'Offene Kritik ist erlaubt'},
-        {id:'pp3', left:'Minderheitenschutz', right:'Schutz für kleine Gruppen'},
-        {id:'pp4', left:'Parteien-Vielfalt', right:'Es gibt verschiedene Angebote'}
-      ] 
-    }
+        {id:'pp1', left:'Pluralismus', right:'Vielzahl von Meinungen/Parteien'},
+        {id:'pp2', left:'Souveränität', right:'Die Macht liegt beim Volk'},
+        {id:'pp3', left:'Rechtsstaat', right:'Regierung muss Gesetze befolgen'}
+      ]
+    } : { type: 'matching', question: "Was gehört zur Demokratie?", pairs: [{id:'pp1', left:'Wahlen', right:'Das Volk bestimmt mit'}, {id:'pp2', left:'Meinungsfreiheit', right:'Jeder darf sprechen'}] }
   },
   {
     id: 104, title: "Gewaltenteilung", emoji: "🏛️", imageType: 'law',
     content: level === 'L'
       ? ["Damit niemand allein wie ein 'König' herrscht, wird die Macht aufgeteilt.", "Es gibt 3 Säulen: Gesetze machen, Regieren und Gerichte."]
       : level === 'M'
-      ? ["Macht wird aufgeteilt in: Gesetzgebung (Parlament), Regierung (Ausführende) und Gerichte (Richter).", "Dies verhindert, dass einer allein die ganze Macht hat."]
+      ? ["Macht wird aufgeteilt in: Gesetzgebung (Parlament), Regierung (Ausführende) und Gerichte (Richter).", "Dies verhindert Machtmissbrauch durch gegenseitige Kontrolle."]
       : ["Die Gewaltenteilung ist ein Grundpfeiler des Rechtsstaats.", "Sie unterscheidet zwischen Legislative (Gesetze), Exekutive (Ausführung) und Judikative (Rechtsprechung)."],
     quiz: { 
-      type: 'ordering', 
-      question: "Bringe die Gewaltenteilung in die richtige Logik (vom Beschluss zur Kontrolle):", 
-      order: [
-        "Gesetzgebung (Parlament beschließt)", 
-        "Regierung (Polizei/Ämter führen aus)", 
-        "Gerichte (Richter prüfen alles)"
+      type: 'drag-drop', 
+      question: "Ordne die Staatsgewalten korrekt zu:", 
+      dragItems: [{id:'g1', text:'Bundestag'}, {id:'g2', text:'Polizei / Regierung'}, {id:'g3', text:'Amtsgericht'}], 
+      dropZones: [
+        {id:'gz1', label:'Legislative (Gesetze)', correctItemId:'g1'},
+        {id:'gz2', label:'Exekutive (Ausführung)', correctItemId:'g2'},
+        {id:'gz3', label:'Judikative (Recht)', correctItemId:'g3'}
       ] 
     }
   },
@@ -243,16 +202,16 @@ const POLITIK_STEPS = (level: 'L' | 'M' | 'S'): LearningStep[] => [
       ? ["Das Grundgesetz schützt uns alle. Artikel 1 sagt: Die Würde des Menschen ist unantastbar.", "Jeder Mensch ist wertvoll."]
       : level === 'M'
       ? ["Menschenrechte gelten für alle: Recht auf Leben, Freiheit und Schule.", "Jeder Mensch muss respektiert werden, egal woher er kommt."]
-      : ["Die Menschenrechte sind universell, unveräußerlich and unteilbar.", "Artikel 1 GG stellt die Menschenwürde als oberstes Gut an den Anfang unserer Verfassung."],
-    quiz: { 
-      type: 'multiple-choice', 
-      question: "Was besagt Artikel 1 des deutschen Grundgesetzes?", 
+      : ["Die Menschenrechte sind universell und unantastbar.", "Artikel 1 GG stellt die Menschenwürde als oberstes Gut über alles andere staatliche Handeln."],
+    quiz: level === 'S' ? {
+      type: 'multiple-choice',
+      question: "Was bedeutet 'unantastbar' in Artikel 1 GG?",
       options: [
-        { text: "Die Würde des Menschen ist unantastbar", isCorrect: true }, 
-        { text: "Jeder muss Politik studieren", isCorrect: false },
-        { text: "Es gibt keine Regeln mehr", isCorrect: false }
-      ] 
-    }
+        { text: "Der Staat darf die Würde niemals verletzen.", isCorrect: true },
+        { text: "Man darf Menschen nicht berühren.", isCorrect: false },
+        { text: "Das Gesetz gilt nur für Politiker.", isCorrect: false }
+      ]
+    } : { type: 'multiple-choice', question: "Welcher Artikel ist besonders wichtig?", options: [{ text: "Artikel 1 (Würde)", isCorrect: true }, { text: "Artikel 99 (Pause)", isCorrect: false }] }
   }
 ];
 
