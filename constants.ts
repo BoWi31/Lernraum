@@ -25,57 +25,59 @@ export const GLOSSARY: Record<string, string> = {
 
 const FEEDBACK_TASK: NotebookTask = { 
   id: 'feedback-task', 
-  type: 'pflicht', 
+  type: 'bonus', 
   label: 'Feedback', 
   task: 'Fülle den Feedbackbogen zum geschafften Lernraum aus.' 
 };
 
 const CREATE_TASKS_GESCHICHTE = (level: string): NotebookTask[] => {
-  let tasks: NotebookTask[] = [];
   if (level === 'Leicht') {
-    tasks = [
-      { id: 't-l-1', type: 'pflicht', label: 'Aufgabe 1', task: 'Wer war Robespierre? Erkläre es in einem Satz.' },
-      { id: 't-l-2', type: 'pflicht', label: 'Aufgabe 2', task: 'Zeichne eine Guillotine und beschrifte das Fallbeil.' },
-      { id: 't-l-b', type: 'bonus', label: 'Bonus', task: 'Male die französische Flagge (Blau, Weiß, Rot).' }
+    return [
+      { id: 'g-l-1', type: 'pflicht', label: 'AFB I', task: 'Wer war Maximilian Robespierre? Erkläre es in einem Satz.' },
+      { id: 'g-l-2', type: 'pflicht', label: 'AFB II', task: 'Zeichne eine Guillotine und erkläre kurz, warum sie als "gerecht" galt.' },
+      { id: 'g-l-3', type: 'kreativ', label: 'AFB III', task: 'Male ein Bild: Wie stellst du dir die Stimmung in Paris 1793 vor?' },
+      FEEDBACK_TASK
     ];
   } else if (level === 'Mittel') {
-    tasks = [
-      { id: 't-m-1', type: 'pflicht', label: 'Aufgabe 1', task: 'Beschreibe den Weg von der Freiheit 1789 zum Terror 1793. Warum änderte sich die Stimmung?' },
-      { id: 't-m-2', type: 'pflicht', label: 'Aufgabe 2', task: 'Erkläre, warum das "Gesetz der Verdächtigen" dazu führte, dass niemand mehr sicher war.' },
-      { id: 't-m-b', type: 'bonus', label: 'Bonus', task: 'Recherchiere: Wie viele Menschen starben während der Schreckensherrschaft?' }
+    return [
+      { id: 'g-m-1', type: 'pflicht', label: 'AFB I', task: 'Nenne drei Gründe, warum die Menschen in Paris 1793 wütend waren.' },
+      { id: 'g-m-2', type: 'pflicht', label: 'AFB II', task: 'Erkläre den Zusammenhang zwischen dem Krieg gegen das Ausland und dem Terror im Inneren.' },
+      { id: 'g-m-3', type: 'kreativ', label: 'AFB III', task: 'Stell dir vor, du bist ein einfacher Bürger. Schreibe einen Tagebucheintrag über deine Angst vor Denunziation.' },
+      FEEDBACK_TASK
     ];
   } else {
-    tasks = [
-      { id: 't-s-1', type: 'pflicht', label: 'Aufgabe 1', task: 'Beurteile Robespierres Theorie: Kann "Terror" jemals ein notwendiges Mittel für "Freiheit" sein?' },
-      { id: 't-s-2', type: 'pflicht', label: 'Aufgabe 2', task: 'Analysiere das Ende der Schreckensherrschaft. Warum stürzten am Ende sogar seine eigenen Anhänger Robespierre?' },
-      { id: 't-s-b', type: 'bonus', label: 'Kreativ', task: 'Schreibe einen Tagebucheintrag eines Bürgers, der Angst hat, denunziert zu werden.' }
+    return [
+      { id: 'g-s-1', type: 'pflicht', label: 'AFB I', task: 'Definiere den Begriff "Tugend" im Sinne von Robespierre.' },
+      { id: 'g-s-2', type: 'pflicht', label: 'AFB II', task: 'Analysiere das "Gesetz der Verdächtigen". Wer konnte alles zum Feind der Revolution werden?' },
+      { id: 'g-s-3', type: 'kreativ', label: 'AFB III', task: 'Beurteile Robespierres Zitat: "Der Terror ist nichts anderes als die schlagfertige, strenge und unbeugsame Gerechtigkeit." Hat er recht?' },
+      FEEDBACK_TASK
     ];
   }
-  return [...tasks, FEEDBACK_TASK];
 };
 
 const CREATE_TASKS_POLITIK = (level: string): NotebookTask[] => {
-  let tasks: NotebookTask[] = [];
   if (level === 'Leicht') {
-    tasks = [
-      { id: 'p-l-1', type: 'pflicht', label: 'Aufgabe 1', task: 'Schreibe auf: Was bedeutet Politik für dich?' },
-      { id: 'p-l-2', type: 'pflicht', label: 'Aufgabe 2', task: 'Nenne 3 Orte in deinem Alltag, wo du Politik bemerkst.' },
-      { id: 'p-l-b', type: 'bonus', label: 'Bonus', task: 'Zeichne ein Symbol für Frieden oder Freiheit.' }
+    return [
+      { id: 'p-l-1', type: 'pflicht', label: 'AFB I', task: 'Was bedeutet der Begriff Politik? Schreibe eine kurze Definition.' },
+      { id: 'p-l-2', type: 'pflicht', label: 'AFB II', task: 'Nenne drei Orte aus deinem Alltag, an denen Politik eine Rolle spielt.' },
+      { id: 'p-l-3', type: 'kreativ', label: 'AFB III', task: 'Was würdest du sofort an deiner Schule ändern, wenn du der Chef wärst?' },
+      FEEDBACK_TASK
     ];
   } else if (level === 'Mittel') {
-    tasks = [
-      { id: 'p-m-1', type: 'pflicht', label: 'Aufgabe 1', task: 'Erkläre den Begriff Demokratie mit eigenen Worten.' },
-      { id: 'p-m-2', type: 'pflicht', label: 'Aufgabe 2', task: 'Warum ist es wichtig, dass die Macht im Staat geteilt wird?' },
-      { id: 'p-m-b', type: 'bonus', label: 'Bonus', task: 'Suche im Internet: Was steht in Artikel 1 des Grundgesetzes?' }
+    return [
+      { id: 'p-m-1', type: 'pflicht', label: 'AFB I', task: 'Was steht in Artikel 1 des Grundgesetzes? Schreibe den Satz auf.' },
+      { id: 'p-m-2', type: 'pflicht', label: 'AFB II', task: 'Erkläre die drei Säulen der Gewaltenteilung und warum wir sie brauchen.' },
+      { id: 'p-m-3', type: 'kreativ', label: 'AFB III', task: 'Diskutiere mit einem Partner: Warum sind Regeln und Gesetze im Internet (z.B. TikTok/Insta) wichtig?' },
+      FEEDBACK_TASK
     ];
   } else {
-    tasks = [
-      { id: 'p-s-1', type: 'pflicht', label: 'Aufgabe 1', task: 'Analysiere: Wie beeinflusst Politik dein Leben im Internet?' },
-      { id: 'p-s-2', type: 'pflicht', label: 'Aufgabe 2', task: 'Diskutiere: Warum sind Menschenrechte für ein friedliches Zusammenleben unverzichtbar?' },
-      { id: 'p-s-b', type: 'bonus', label: 'Kreativ', task: 'Entwirf ein Plakat für eine Schulwahl: Was würdest du ändern?' }
+    return [
+      { id: 'p-s-1', type: 'pflicht', label: 'AFB I', task: 'Erkläre den Begriff "Menschenwürde" mit eigenen Worten.' },
+      { id: 'p-s-2', type: 'pflicht', label: 'AFB II', task: 'Vergleiche eine Demokratie mit einer Alleinherrschaft (Diktatur). Was sind die Hauptunterschiede?' },
+      { id: 'p-s-3', type: 'kreativ', label: 'AFB III', task: 'Entwirf ein Plakat für eine Wahl: Mit welchen Themen würdest du junge Menschen für Politik begeistern?' },
+      FEEDBACK_TASK
     ];
   }
-  return [...tasks, FEEDBACK_TASK];
 };
 
 const WIEDERHOLUNG_STEPS = (level: 'L' | 'M' | 'S'): LearningStep[] => [
